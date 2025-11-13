@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -10,11 +9,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Lock } from 'lucide-react';
 
-interface LoginPageProps {
-    onAuthSuccess: () => void;
-}
-
-export default function LoginPage({ onAuthSuccess }: LoginPageProps) {
+export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -32,10 +27,12 @@ export default function LoginPage({ onAuthSuccess }: LoginPageProps) {
       try {
         sessionStorage.setItem('isAdminAuthenticated', 'true');
         toast({ title: 'Acesso liberado!', description: 'Bem-vindo(a) ao painel.' });
-        onAuthSuccess();
-        router.push('/admin');
+        // Instead of a prop, we force a reload or router push to make the layout re-evaluate
+        router.push('/admin'); 
+        router.refresh(); // Forces a refresh of the server components and layout
       } catch (error) {
          setError('Seu navegador não suporta o armazenamento de sessão. Tente usar um navegador diferente.');
+         toast({ title: 'Erro de Navegador', description: 'Não foi possível salvar a sessão.', variant: 'destructive'});
       }
     } else {
       setError('Senha incorreta. Tente novamente.');

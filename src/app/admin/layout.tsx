@@ -1,4 +1,3 @@
-
 "use client"
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -12,12 +11,13 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from 'react';
-import LoginPage from './login/page';
+import { useToast } from '@/hooks/use-toast';
 
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const router = useRouter();
+    const { toast } = useToast();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -30,6 +30,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }
         setIsLoading(false);
     }, []);
+    
+    const handleAuthSuccess = () => {
+        setIsAuthenticated(true);
+        toast({ title: 'Acesso liberado!', description: 'Bem-vindo(a) ao painel.' });
+        router.push('/admin');
+    }
 
     const handleLogout = () => {
         sessionStorage.removeItem('isAdminAuthenticated');
@@ -53,17 +59,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         return <div className="flex h-screen w-full items-center justify-center">Carregando...</div>;
     }
     
+    // If user is not authenticated, and not on the login page, redirect to login
     if (!isAuthenticated && pathname !== '/admin/login') {
-         return <LoginPage onAuthSuccess={() => setIsAuthenticated(true)} />;
+         router.push('/admin/login');
+         return <div className="flex h-screen w-full items-center justify-center">Redirecionando para o login...</div>;
     }
 
-    if(pathname === '/admin/login' && isAuthenticated){
+    // If user is authenticated but somehow on the login page, redirect to dashboard
+    if(isAuthenticated && pathname === '/admin/login'){
         router.push('/admin');
-        return null;
+        return <div className="flex h-screen w-full items-center justify-center">Redirecionando para o painel...</div>;
     }
     
+    // Let the login page render itself if it's the current path and user is not authenticated
     if (pathname === '/admin/login') {
-        return <LoginPage onAuthSuccess={() => setIsAuthenticated(true)} />;
+        return children;
     }
     
     return (
