@@ -230,7 +230,7 @@ export default function AgendaView({ initialBookings, procedures, initialAvailab
                     }
                 }}
               />
-              <div className="space-y-2 text-xs text-muted-foreground w-full max-w-xs md:w-auto">
+              <div className="space-y-2 text-xs text-muted-foreground w-full flex flex-col items-center md:items-start max-w-xs md:w-auto">
                 <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#f59e0b' }}></div>
                     <span>Dia com agendamento(s) pendente(s).</span>
@@ -328,5 +328,3 @@ export default function AgendaView({ initialBookings, procedures, initialAvailab
     </>
   );
 }
-
-    
