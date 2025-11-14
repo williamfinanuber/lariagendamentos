@@ -211,8 +211,8 @@ export default function AgendaView({ initialBookings, procedures, initialAvailab
                   Agendar
               </Button>
            </div>
-           <CardTitle className="text-xl md:text-2xl">Agenda</CardTitle>
-           <CardDescription className="text-xs pt-1">
+           <CardTitle className="text-2xl md:text-3xl text-center">Agenda</CardTitle>
+           <CardDescription className="text-xs pt-1 text-center">
               As cores no calendário indicam o status dos agendamentos no dia.
            </CardDescription>
         </CardHeader>
@@ -343,5 +343,3 @@ export default function AgendaView({ initialBookings, procedures, initialAvailab
     </>
   );
 }
-
-    
