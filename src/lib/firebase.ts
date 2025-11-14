@@ -27,7 +27,7 @@ import {
     setDoc
 } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import type { Availability, Procedure, Booking, Category, Transaction, Product, StockCategory, AvailabilitySettings, VerificationToken } from './types';
+import type { Availability, Procedure, Booking, Category, Transaction, Product, StockCategory, AvailabilitySettings, VerificationToken, BlockedSlot } from './types';
 
 
 // Your web app's Firebase configuration is now loaded from environment variables
@@ -158,6 +158,23 @@ export const updateAvailabilitySettings = (settings: Partial<AvailabilitySetting
     return setDoc(settingsDocRef, updateData, { merge: true });
 };
 
+// Blocked Slots
+export const getBlockedSlots = async (): Promise<BlockedSlot[]> => {
+    const blockedSlotsCollection = collection(db, "blockedSlots");
+    const snapshot = await getDocs(blockedSlotsCollection);
+    return snapshot.docs.map(doc => ({ id: doc.id, times: doc.data().times || [] }));
+};
+
+export const updateBlockedSlots = async (date: string, times: string[]) => {
+    const blockedSlotDocRef = doc(db, "blockedSlots", date);
+    if (times.length > 0) {
+        return setDoc(blockedSlotDocRef, { times });
+    } else {
+        // If there are no times to block, delete the document to keep the collection clean
+        return deleteDoc(blockedSlotDocRef);
+    }
+};
+
 
 function generateTimeSlots(startStr: string, endStr: string, interval: number): string[] {
     const slots = [];
@@ -172,36 +189,34 @@ function generateTimeSlots(startStr: string, endStr: string, interval: number): 
 }
 
 export const getAvailability = async (): Promise<Availability> => {
-    const settings = await getAvailabilitySettings();
-    const confirmedBookings = (await getBookings()).filter(b => b.status === 'confirmed' || b.status === 'completed');
-    const procedures = await getProcedures();
+    const [settings, confirmedBookings, procedures, blockedSlots] = await Promise.all([
+        getAvailabilitySettings(),
+        (await getBookings()).filter(b => b.status === 'confirmed' || b.status === 'completed'),
+        getProcedures(),
+        getBlockedSlots()
+    ]);
     
     const availability: Availability = {};
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Base weekdays are fixed Mon-Fri
-    const activeWeekdays: number[] = [...settings.weekdays];
-    if (settings.sundayScheduling) {
-        activeWeekdays.push(0); // Add Sunday if toggled
-    }
-    if (settings.saturdayScheduling) {
-        activeWeekdays.push(6); // Add Saturday if toggled
-    }
+    const activeWeekdays: number[] = [1, 2, 3, 4, 5]; // Default Mon-Fri
+    if (settings.sundayScheduling) activeWeekdays.push(0);
+    if (settings.saturdayScheduling) activeWeekdays.push(6);
 
-    // Generate availability for the next 60 days
+    const blockedSlotsMap = new Map(blockedSlots.map(bs => [bs.id, bs.times]));
+
     for (let i = 0; i < 60; i++) {
         const date = new Date(today);
         date.setDate(today.getDate() + i);
         const dayOfWeek = date.getDay();
 
         if (activeWeekdays.includes(dayOfWeek)) {
-            const dateKey = date.toISOString().split('T')[0]; // YYYY-MM-DD
+            const dateKey = date.toISOString().split('T')[0];
             let timeSlots = generateTimeSlots(settings.startTime, settings.endTime, settings.slotInterval);
 
             // Filter out booked slots
             const bookingsForDate = confirmedBookings.filter(b => b.date === dateKey);
-
             bookingsForDate.forEach(booking => {
                 const procedure = procedures.find(p => p.id === booking.procedureId);
                 if (!procedure) return;
@@ -215,18 +230,28 @@ export const getAvailability = async (): Promise<Availability> => {
                     for (let j = 0; j < slotsToBlock; j++) {
                         const slotIndex = startIndex + j;
                         if (slotIndex < timeSlots.length) {
-                             timeSlots[slotIndex] = ''; // Mark for removal
+                             timeSlots[slotIndex] = '';
                         }
                     }
                 }
             });
 
-            availability[dateKey] = timeSlots.filter(Boolean); // Remove empty strings
+            // Filter out manually blocked slots
+            const manuallyBlocked = blockedSlotsMap.get(dateKey) || [];
+            manuallyBlocked.forEach(blockedTime => {
+                 const index = timeSlots.indexOf(blockedTime);
+                 if (index > -1) {
+                    timeSlots[index] = '';
+                 }
+            });
+
+            availability[dateKey] = timeSlots.filter(Boolean);
         }
     }
     
     return availability;
 };
+
 
 // --- END NEW AVAILABILITY LOGIC ---
 

@@ -20,6 +20,11 @@ export interface AvailabilitySettings {
   saturdayScheduling: boolean;
 }
 
+export interface BlockedSlot {
+  id: string; // date 'yyyy-MM-dd'
+  times: string[];
+}
+
 export interface Booking {
     id: string;
     procedureId: string;
