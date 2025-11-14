@@ -326,7 +326,7 @@ function BookingFlowContent({ procedures, availability, existingBooking = null }
                                     <Info className="h-5 w-5 text-primary mt-1 flex-shrink-0" />
                                     <div>
                                       <h4 className="font-semibold text-card-foreground">Confirmação com Sinal</h4>
-                                      <p className="text-sm text-muted-foreground">Para confirmar seu agendamento, é necessário o pagamento de um sinal de 30% do valor do procedimento. O restante é pago no dia.</p>
+                                      <p className="text-sm text-muted-foreground">Para confirmar seu agendamento, é necessário o pagamento de um sinal de 40% do valor do procedimento. O restante é pago no dia.</p>
                                     </div>
                                   </CardContent>
                                 </Card>
