@@ -8,6 +8,7 @@ import { Loader2, ArrowLeft } from 'lucide-react';
 import type { Product, StockCategory } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Card, CardHeader } from '@/components/ui/card';
 
 export default function StockPage() {
   const [stockData, setStockData] = useState<{
@@ -43,14 +44,18 @@ export default function StockPage() {
 
   return (
     <div className="space-y-6">
-        <div className="flex justify-start">
-            <Button asChild variant="outline">
-            <Link href="/admin">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Voltar
-            </Link>
-            </Button>
-        </div>
+        <Card>
+            <CardHeader>
+                 <div className="pb-4">
+                    <Button asChild variant="outline" size="sm">
+                        <Link href="/admin">
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Voltar
+                        </Link>
+                    </Button>
+                </div>
+            </CardHeader>
+        </Card>
         <StockClientPage 
         initialProducts={stockData.products} 
         initialCategories={stockData.categories}

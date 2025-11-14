@@ -50,7 +50,7 @@ export default function FinancePage() {
   return (
     <div className="space-y-6">
         <div className="flex justify-start">
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" size="sm">
             <Link href="/admin">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Voltar

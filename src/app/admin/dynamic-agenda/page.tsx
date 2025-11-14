@@ -40,18 +40,18 @@ export default function DynamicAgendaPage() {
 
   return (
     <div className="space-y-6">
-        <div className="flex justify-start">
-            <Button asChild variant="outline">
-            <Link href="/admin">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Voltar
-            </Link>
-            </Button>
-        </div>
         <Card>
             <CardHeader>
-                <CardTitle>Agenda Dinâmica</CardTitle>
-                <CardDescription>
+                <div className="pb-4">
+                    <Button asChild variant="outline" size="sm">
+                        <Link href="/admin">
+                            <ArrowLeft className="mr-2 h-4 w-4" />
+                            Voltar
+                        </Link>
+                    </Button>
+                </div>
+                <CardTitle className="text-xl md:text-2xl">Agenda Dinâmica</CardTitle>
+                <CardDescription className="text-sm">
                     Clique em um agendamento para marcá-lo como atendido ou para cancelá-lo.
                 </CardDescription>
             </CardHeader>

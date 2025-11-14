@@ -64,16 +64,16 @@ export default function AvailabilityPage() {
 
   return (
     <div className="space-y-8">
-        <div className="flex justify-start">
-            <Button asChild variant="outline">
-            <Link href="/admin">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Voltar
-            </Link>
-            </Button>
-        </div>
       <Card>
         <CardHeader>
+          <div className="pb-4">
+              <Button asChild variant="outline" size="sm">
+              <Link href="/admin">
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Voltar
+              </Link>
+              </Button>
+          </div>
           <CardTitle className="flex items-center gap-2 text-xl md:text-2xl">
             <Calendar /> Configurações de Disponibilidade
           </CardTitle>

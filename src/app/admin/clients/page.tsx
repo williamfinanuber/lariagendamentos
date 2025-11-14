@@ -9,6 +9,7 @@ import { Loader2, ArrowLeft } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Card, CardHeader } from '@/components/ui/card';
 
 interface Client {
   name: string;
@@ -69,14 +70,18 @@ export default function ClientsPage() {
     return (
         <Suspense fallback={<div className="flex h-64 w-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>}>
             <div className="space-y-6">
-                <div className="flex justify-start">
-                    <Button asChild variant="outline">
-                    <Link href="/admin">
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Voltar
-                    </Link>
-                    </Button>
-                </div>
+                <Card>
+                    <CardHeader>
+                        <div className="pb-4">
+                            <Button asChild variant="outline" size="sm">
+                                <Link href="/admin">
+                                    <ArrowLeft className="mr-2 h-4 w-4" />
+                                    Voltar
+                                </Link>
+                            </Button>
+                        </div>
+                    </CardHeader>
+                </Card>
                 <ClientsPageContent />
             </div>
         </Suspense>
