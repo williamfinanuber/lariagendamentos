@@ -120,7 +120,7 @@ export default function MyBookingsPage() {
                     <FormControl>
                         <div className="relative">
                             <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                            <Input placeholder="(XX) XXXXX-XXXX" {...field} className="pl-10" />
+                            <Input placeholder="(XX) XXXXX-XXXX" {...field} className="pl-10" type="tel" inputMode="numeric" />
                         </div>
                     </FormControl>
                     <FormMessage />

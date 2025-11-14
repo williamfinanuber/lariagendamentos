@@ -202,7 +202,7 @@ export default function AdminBookingDialog({
                         <FormField control={form.control} name="clientContact" render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Contato (WhatsApp)</FormLabel>
-                                <FormControl><Input type="tel" placeholder="(XX) XXXXX-XXXX" {...field} onChange={(e) => handleNumericInputChange(e, 'clientContact')} /></FormControl>
+                                <FormControl><Input type="tel" placeholder="(XX) XXXXX-XXXX" {...field} onChange={(e) => handleNumericInputChange(e, 'clientContact')} inputMode="numeric" /></FormControl>
                                 <FormMessage />
                             </FormItem>
                         )}/>

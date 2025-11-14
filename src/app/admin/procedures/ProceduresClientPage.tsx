@@ -171,11 +171,11 @@ export default function ProceduresClientPage({ initialProcedures }: ProceduresCl
       </div>
       <div className="grid grid-cols-4 items-center gap-4">
         <Label htmlFor="price" className="text-right text-sm">Preço (R$)</Label>
-        <Input id="price" type="number" value={currentProcedure.price || ''} onChange={handleFormChange} className="col-span-3" placeholder="Ex: 180" />
+        <Input id="price" type="number" inputMode="decimal" value={currentProcedure.price || ''} onChange={handleFormChange} className="col-span-3" placeholder="Ex: 180" />
       </div>
       <div className="grid grid-cols-4 items-center gap-4">
         <Label htmlFor="duration" className="text-right text-sm">Duração (min)</Label>
-        <Input id="duration" type="number" value={currentProcedure.duration || ''} onChange={handleFormChange} className="col-span-3" placeholder="Ex: 120" />
+        <Input id="duration" type="number" inputMode="numeric" pattern="[0-9]*" value={currentProcedure.duration || ''} onChange={handleFormChange} className="col-span-3" placeholder="Ex: 120" />
       </div>
        <div className="grid grid-cols-4 items-start gap-4">
         <Label htmlFor="imageUpload" className="text-right pt-2 text-sm">Imagem</Label>
@@ -206,23 +206,23 @@ export default function ProceduresClientPage({ initialProcedures }: ProceduresCl
   return (
     <>
       <Card>
-        <CardHeader className="flex flex-col gap-y-2 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-4">
-                <Button asChild variant="outline" size="sm" className="flex-shrink-0">
-                    <Link href="/admin">
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Voltar
-                    </Link>
-                </Button>
-                <div>
-                    <CardTitle className="text-xl md:text-2xl">Procedimentos</CardTitle>
-                    <CardDescription className="text-sm">Gerencie os procedimentos oferecidos no studio.</CardDescription>
-                </div>
-            </div>
-            <Button size="sm" className="gap-1" onClick={() => openDialog()}>
-                <PlusCircle className="h-4 w-4" />
-                Adicionar Procedimento
-            </Button>
+        <CardHeader>
+           <div className="flex items-center gap-4">
+              <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+                  <Link href="/admin">
+                      <ArrowLeft className="mr-2 h-4 w-4" />
+                      Voltar
+                  </Link>
+              </Button>
+              <div className="flex-1">
+                 <CardTitle className="text-xl md:text-2xl">Procedimentos</CardTitle>
+                 <CardDescription className="text-sm pt-2">Gerencie os procedimentos oferecidos no studio.</CardDescription>
+              </div>
+               <Button size="sm" className="gap-1 flex-shrink-0" onClick={() => openDialog()}>
+                  <PlusCircle className="h-4 w-4" />
+                  <span className="hidden sm:inline">Adicionar</span>
+              </Button>
+           </div>
         </CardHeader>
         <CardContent>
           <Table>
@@ -321,5 +321,3 @@ export default function ProceduresClientPage({ initialProcedures }: ProceduresCl
     </>
   );
 }
-
-    

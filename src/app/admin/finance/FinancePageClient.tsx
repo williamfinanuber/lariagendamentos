@@ -506,7 +506,7 @@ export default function FinancePageClient({ initialTransactions, initialCategori
               </div>
               <div>
                 <Label htmlFor="amount">Valor (R$)</Label>
-                <Input id="amount" type="number" step="0.01" {...register('amount')} />
+                <Input id="amount" type="number" inputMode="decimal" step="0.01" {...register('amount')} />
                  {errors.amount && <p className="text-red-500 text-sm">{errors.amount.message}</p>}
               </div>
               <div>

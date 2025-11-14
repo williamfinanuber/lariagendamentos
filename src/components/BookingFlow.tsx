@@ -327,6 +327,7 @@ function BookingFlowContent({ procedures, availability, existingBooking = null }
                                             <Input 
                                                 type="tel" 
                                                 placeholder="(XX) XXXXX-XXXX" 
+                                                inputMode="numeric"
                                                 {...field} 
                                                 onChange={(e) => handleNumericInputChange(e, 'contact')} 
                                             />

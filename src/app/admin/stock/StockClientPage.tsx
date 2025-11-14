@@ -495,7 +495,7 @@ export default function StockClientPage({ initialProducts, initialCategories }: 
                     <FormItem>
                         <FormLabel>Quantidade Inicial</FormLabel>
                         <FormControl>
-                            <Input id="quantity" type="number" {...field} value={field.value ?? ''} />
+                            <Input id="quantity" type="number" inputMode="numeric" pattern="[0-9]*" {...field} value={field.value ?? ''} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -554,7 +554,7 @@ export default function StockClientPage({ initialProducts, initialCategories }: 
                     <FormItem>
                         <FormLabel>Quantidade</FormLabel>
                         <FormControl>
-                            <Input id="quantity" type="number" {...field} value={field.value ?? ''}/>
+                            <Input id="quantity" type="number" inputMode="numeric" pattern="[0-9]*" {...field} value={field.value ?? ''}/>
                         </FormControl>
                         <FormMessage />
                     </FormItem>

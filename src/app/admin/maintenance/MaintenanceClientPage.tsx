@@ -168,6 +168,8 @@ export default function MaintenanceClientPage({ completedBookings }: Maintenance
                 <Input 
                     id="maintenance-days"
                     type="number"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     value={maintenanceDays}
                     onChange={handleDaysChange}
                     className="w-full sm:w-[200px]"
