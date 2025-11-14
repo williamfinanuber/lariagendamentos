@@ -9,7 +9,7 @@ import { Loader2, ArrowLeft } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Card, CardHeader } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 interface Client {
   name: string;
@@ -72,13 +72,16 @@ export default function ClientsPage() {
             <div className="space-y-6">
                 <Card>
                     <CardHeader>
-                        <div className="pb-4">
-                            <Button asChild variant="outline" size="sm">
-                                <Link href="/admin">
-                                    <ArrowLeft className="mr-2 h-4 w-4" />
-                                    Voltar
-                                </Link>
-                            </Button>
+                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div className="flex items-center gap-4">
+                                <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+                                    <Link href="/admin">
+                                        <ArrowLeft className="mr-2 h-4 w-4" />
+                                        Voltar
+                                    </Link>
+                                </Button>
+                                {/* The title will be dynamic inside the client component */}
+                            </div>
                         </div>
                     </CardHeader>
                 </Card>

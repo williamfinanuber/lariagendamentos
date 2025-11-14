@@ -459,10 +459,7 @@ export default function FinancePageClient({ initialTransactions, initialCategori
     <>
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Controle Financeiro</h1>
-            <p className="text-muted-foreground text-sm md:text-base">Registre suas receitas e despesas para acompanhar a saúde do seu negócio.</p>
-        </div>
+        
         <Dialog open={isTransactionDialogOpen} onOpenChange={setIsTransactionDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={() => openDialog()}><PlusCircle className="mr-2" /> Nova Transação</Button>
@@ -737,7 +734,3 @@ export default function FinancePageClient({ initialTransactions, initialCategori
     </>
   );
 }
-
-    
-
-    

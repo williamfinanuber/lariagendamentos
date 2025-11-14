@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -71,62 +70,59 @@ export default function RemindersClientPage({ bookings: initialBookings }: Remin
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl md:text-2xl"><Bell/> Lembretes de Horário</CardTitle>
-        <CardDescription className="text-sm md:text-base">
+    <>
+        <CardDescription className="text-sm md:text-base pt-2">
           Envie lembretes para os clientes com agendamento confirmado para amanhã, dia {tomorrow ? format(parseISO(tomorrow), 'dd/MM/yyyy') : '...'}.
         </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="px-2 text-xs">Cliente</TableHead>
-              <TableHead className="px-2 text-xs">Horário</TableHead>
-              <TableHead className="px-2 text-xs">Procedimento</TableHead>
-              <TableHead className="text-right px-2 text-xs">Ação</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {bookingsForTomorrow.length > 0 ? (
-              bookingsForTomorrow.map((booking) => {
-                const isSent = booking.reminderSent === true;
-                const loading = isLoading[booking.id];
-                return (
-                  <TableRow key={booking.id}>
-                    <TableCell className="font-medium text-xs p-2">{booking.clientName}</TableCell>
-                    <TableCell className="font-medium text-xs p-2">{booking.time}</TableCell>
-                    <TableCell className="text-xs p-2">{booking.procedureName}</TableCell>
-                    <TableCell className="text-right p-2">
-                      <Button
-                        size="sm"
-                        className={cn(
-                          "text-xs h-8 px-2",
-                          isSent 
-                            ? "bg-gray-600 hover:bg-gray-700 cursor-not-allowed" 
-                            : "bg-green-500 hover:bg-green-600"
-                        )}
-                        onClick={() => handleSendReminder(booking)}
-                        disabled={isSent || loading}
-                      >
-                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : (isSent ? <Check className="mr-1.5 h-3 w-3" /> : <MessageSquare className="mr-1.5 h-3 w-3" />)}
-                        {isSent ? 'Enviado' : 'Enviar'}
-                      </Button>
+        <CardContent className="pt-6">
+            <Table>
+            <TableHeader>
+                <TableRow>
+                <TableHead className="px-2 text-xs">Cliente</TableHead>
+                <TableHead className="px-2 text-xs">Horário</TableHead>
+                <TableHead className="px-2 text-xs">Procedimento</TableHead>
+                <TableHead className="text-right px-2 text-xs">Ação</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {bookingsForTomorrow.length > 0 ? (
+                bookingsForTomorrow.map((booking) => {
+                    const isSent = booking.reminderSent === true;
+                    const loading = isLoading[booking.id];
+                    return (
+                    <TableRow key={booking.id}>
+                        <TableCell className="font-medium text-xs p-2">{booking.clientName}</TableCell>
+                        <TableCell className="font-medium text-xs p-2">{booking.time}</TableCell>
+                        <TableCell className="text-xs p-2">{booking.procedureName}</TableCell>
+                        <TableCell className="text-right p-2">
+                        <Button
+                            size="sm"
+                            className={cn(
+                            "text-xs h-8 px-2",
+                            isSent 
+                                ? "bg-gray-600 hover:bg-gray-700 cursor-not-allowed" 
+                                : "bg-green-500 hover:bg-green-600"
+                            )}
+                            onClick={() => handleSendReminder(booking)}
+                            disabled={isSent || loading}
+                        >
+                            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : (isSent ? <Check className="mr-1.5 h-3 w-3" /> : <MessageSquare className="mr-1.5 h-3 w-3" />)}
+                            {isSent ? 'Enviado' : 'Enviar'}
+                        </Button>
+                        </TableCell>
+                    </TableRow>
+                    );
+                })
+                ) : (
+                <TableRow>
+                    <TableCell colSpan={4} className="h-24 text-center text-sm md:text-base">
+                    Nenhum agendamento confirmado para amanhã.
                     </TableCell>
-                  </TableRow>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell colSpan={4} className="h-24 text-center text-sm md:text-base">
-                  Nenhum agendamento confirmado para amanhã.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
+                </TableRow>
+                )}
+            </TableBody>
+            </Table>
+        </CardContent>
+    </>
   );
 }

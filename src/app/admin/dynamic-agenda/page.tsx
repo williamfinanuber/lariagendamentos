@@ -1,3 +1,4 @@
+
 "use client";
 
 import { getBookings } from '@/lib/firebase';
@@ -42,16 +43,18 @@ export default function DynamicAgendaPage() {
     <div className="space-y-6">
         <Card>
             <CardHeader>
-                <div className="pb-4">
-                    <Button asChild variant="outline" size="sm">
-                        <Link href="/admin">
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Voltar
-                        </Link>
-                    </Button>
+                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                        <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+                            <Link href="/admin">
+                                <ArrowLeft className="mr-2 h-4 w-4" />
+                                Voltar
+                            </Link>
+                        </Button>
+                        <CardTitle className="text-xl md:text-2xl">Agenda Dinâmica</CardTitle>
+                    </div>
                 </div>
-                <CardTitle className="text-xl md:text-2xl">Agenda Dinâmica</CardTitle>
-                <CardDescription className="text-sm">
+                <CardDescription className="text-sm pt-2">
                     Clique em um agendamento para marcá-lo como atendido ou para cancelá-lo.
                 </CardDescription>
             </CardHeader>

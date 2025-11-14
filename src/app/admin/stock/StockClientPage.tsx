@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -320,14 +319,6 @@ export default function StockClientPage({ initialProducts, initialCategories }: 
   return (
     <>
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-            <h1 className="text-xl md:text-2xl font-bold tracking-tight">Controle de Estoque</h1>
-            <p className="text-muted-foreground text-sm">Gerencie os produtos e materiais do seu salão.</p>
-        </div>
-          <Button onClick={() => openProductDialog()}><PlusCircle className="mr-2 h-4 w-4" /> Novo Produto</Button>
-      </div>
-
        <Tabs defaultValue="products">
         <TabsList className="grid w-full grid-cols-2 text-xs md:text-sm">
             <TabsTrigger value="products">Produtos</TabsTrigger>
@@ -336,8 +327,11 @@ export default function StockClientPage({ initialProducts, initialCategories }: 
         <TabsContent value="products">
             <Card>
                 <CardHeader>
-                    <CardTitle className="text-base md:text-xl">Lista de Produtos</CardTitle>
-                    <CardDescription className="text-sm">Controle as entradas e saídas e saiba quando comprar mais.</CardDescription>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <CardTitle className="text-base md:text-xl">Lista de Produtos</CardTitle>
+                        <Button onClick={() => openProductDialog()}><PlusCircle className="mr-2 h-4 w-4" /> Novo Produto</Button>
+                    </div>
+                    <CardDescription className="text-sm pt-2">Controle as entradas e saídas e saiba quando comprar mais.</CardDescription>
                     <div className="relative pt-2">
                         <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         <Input

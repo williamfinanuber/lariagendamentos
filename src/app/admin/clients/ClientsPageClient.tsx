@@ -125,26 +125,26 @@ export default function ClientsPageClient({ clients }: ClientsPageClientProps) {
 
   return (
     <Card>
-      <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <div>
-          <CardTitle className="flex items-center gap-2 text-xl md:text-2xl">{getPageTitle()}</CardTitle>
-          <CardDescription className="text-sm">
+      <CardHeader>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <CardTitle className="flex items-center gap-2 text-xl md:text-2xl">{getPageTitle()}</CardTitle>
+            <div className="flex gap-2">
+                {filter === 'today' || filter === 'month' ? (
+                    <Button onClick={() => handleFilterToggle('all')} variant="outline">
+                    <Gift className="mr-2" />
+                    Mostrar Todos
+                    </Button>
+                ) : (
+                    <Button onClick={() => handleFilterToggle('month')} variant="outline">
+                    <Gift className="mr-2" />
+                    Aniversariantes do Mês
+                    </Button>
+                )}
+            </div>
+        </div>
+        <CardDescription className="text-sm pt-2">
             {filter === 'today' ? 'Envie uma mensagem de parabéns para seus clientes.' : 'Visualize todos os seus clientes cadastrados.'}
-          </CardDescription>
-        </div>
-         <div className="flex gap-2 mt-4 md:mt-0">
-          {filter === 'today' || filter === 'month' ? (
-             <Button onClick={() => handleFilterToggle('all')} variant="outline">
-               <Gift className="mr-2" />
-               Mostrar Todos
-             </Button>
-          ) : (
-             <Button onClick={() => handleFilterToggle('month')} variant="outline">
-              <Gift className="mr-2" />
-              Aniversariantes do Mês
-            </Button>
-          )}
-        </div>
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Table>

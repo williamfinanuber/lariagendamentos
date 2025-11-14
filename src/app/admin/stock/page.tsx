@@ -8,7 +8,7 @@ import { Loader2, ArrowLeft } from 'lucide-react';
 import type { Product, StockCategory } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { Card, CardHeader } from '@/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 export default function StockPage() {
   const [stockData, setStockData] = useState<{
@@ -46,14 +46,18 @@ export default function StockPage() {
     <div className="space-y-6">
         <Card>
             <CardHeader>
-                 <div className="pb-4">
-                    <Button asChild variant="outline" size="sm">
-                        <Link href="/admin">
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Voltar
-                        </Link>
-                    </Button>
+                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                        <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+                            <Link href="/admin">
+                                <ArrowLeft className="mr-2 h-4 w-4" />
+                                Voltar
+                            </Link>
+                        </Button>
+                        <CardTitle className="text-xl md:text-2xl">Controle de Estoque</CardTitle>
+                    </div>
                 </div>
+                 <CardDescription className="text-sm pt-2">Gerencie os produtos e materiais do seu salão.</CardDescription>
             </CardHeader>
         </Card>
         <StockClientPage 

@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { useState } from 'react';
@@ -39,9 +38,17 @@ export default function MaintenanceClientPage({ completedBookings }: Maintenance
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [correctPassword, setCorrectPassword] = useState('123456');
 
   const { toast } = useToast();
-  const correctPassword = '123456';
+  
+  useState(() => {
+    const storedPassword = localStorage.getItem('adminPassword');
+    if (storedPassword) {
+      setCorrectPassword(storedPassword);
+    }
+  });
+
 
   const handleFilterClick = () => {
     const days = parseInt(maintenanceDays, 10);
