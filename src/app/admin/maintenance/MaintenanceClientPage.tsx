@@ -167,10 +167,10 @@ export default function MaintenanceClientPage({ completedBookings }: Maintenance
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Cliente</TableHead>
-              <TableHead>Procedimento</TableHead>
-              <TableHead>Último Atendimento</TableHead>
-              <TableHead className="text-right">Ação</TableHead>
+              <TableHead className="px-2 text-xs">Cliente</TableHead>
+              <TableHead className="px-2 text-xs">Procedimento</TableHead>
+              <TableHead className="px-2 text-xs text-center">Último Atend.</TableHead>
+              <TableHead className="text-right px-2 text-xs">Ação</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -183,14 +183,14 @@ export default function MaintenanceClientPage({ completedBookings }: Maintenance
             ) : filteredClients.length > 0 ? (
               filteredClients.map((booking) => (
                 <TableRow key={booking.id}>
-                  <TableCell className="font-medium text-sm md:text-base">{booking.clientName}</TableCell>
-                  <TableCell className="text-sm md:text-base">{booking.procedureName}</TableCell>
-                  <TableCell className="text-sm md:text-base">
-                    {format(parseISO(booking.date), "dd/MM/yyyy", { locale: ptBR })}
+                  <TableCell className="font-medium text-xs p-2">{booking.clientName}</TableCell>
+                  <TableCell className="text-xs p-2">{booking.procedureName}</TableCell>
+                  <TableCell className="text-xs p-2 text-center">
+                    {format(parseISO(booking.date), "dd/MM/yy", { locale: ptBR })}
                   </TableCell>
-                  <TableCell className="text-right">
-                      <Button size="sm" className="bg-green-500 hover:bg-green-600 text-xs md:text-sm" onClick={() => handleSendReminder(booking)}>
-                          <MessageSquare className="mr-2" />
+                  <TableCell className="text-right p-2">
+                      <Button size="sm" className="bg-green-500 hover:bg-green-600 text-xs h-8 px-2" onClick={() => handleSendReminder(booking)}>
+                          <MessageSquare className="mr-1.5 h-3 w-3" />
                           Enviar
                       </Button>
                   </TableCell>
