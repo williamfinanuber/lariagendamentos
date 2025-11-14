@@ -4,8 +4,10 @@
 import { getTransactions, getCategories, getBookings } from '@/lib/firebase';
 import FinancePageClient from './FinancePageClient';
 import { useEffect, useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
 import type { Transaction, Category, Booking } from '@/lib/types';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function FinancePage() {
   const [financeData, setFinanceData] = useState<{
@@ -46,10 +48,20 @@ export default function FinancePage() {
   }
 
   return (
-    <FinancePageClient 
-      initialTransactions={financeData.transactions} 
-      initialCategories={financeData.categories}
-      initialBookings={financeData.bookings}
-    />
+    <div className="space-y-6">
+        <div className="flex justify-start">
+            <Button asChild variant="outline">
+            <Link href="/admin">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Voltar
+            </Link>
+            </Button>
+        </div>
+        <FinancePageClient 
+        initialTransactions={financeData.transactions} 
+        initialCategories={financeData.categories}
+        initialBookings={financeData.bookings}
+        />
+    </div>
   );
 }

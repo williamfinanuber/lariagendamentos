@@ -5,8 +5,10 @@ import { getProcedures } from '@/lib/firebase';
 import type { Procedure } from '@/lib/types';
 import ProceduresClientPage from './ProceduresClientPage';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle, Loader2 } from 'lucide-react';
+import { AlertTriangle, Loader2, ArrowLeft } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function ProceduresPage() {
   const [initialProcedures, setInitialProcedures] = useState<Procedure[] | null>(null);
@@ -52,5 +54,17 @@ export default function ProceduresPage() {
     return <div>Não foi possível carregar os procedimentos.</div>;
   }
 
-  return <ProceduresClientPage initialProcedures={initialProcedures} />;
+  return (
+    <div className="space-y-6">
+        <div className="flex justify-start">
+            <Button asChild variant="outline">
+            <Link href="/admin">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Voltar
+            </Link>
+            </Button>
+        </div>
+        <ProceduresClientPage initialProcedures={initialProcedures} />
+    </div>
+  );
 }

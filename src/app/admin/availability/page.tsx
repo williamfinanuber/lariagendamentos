@@ -6,9 +6,11 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Sun, Moon, Calendar, Loader2 } from "lucide-react";
+import { Sun, Moon, Calendar, Loader2, ArrowLeft } from "lucide-react";
 import { getAvailabilitySettings, updateAvailabilitySettings } from "@/lib/firebase";
 import type { AvailabilitySettings } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import Link from 'next/link';
 
 export default function AvailabilityPage() {
   const [settings, setSettings] = useState<AvailabilitySettings | null>(null);
@@ -62,6 +64,14 @@ export default function AvailabilityPage() {
 
   return (
     <div className="space-y-8">
+        <div className="flex justify-start">
+            <Button asChild variant="outline">
+            <Link href="/admin">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Voltar
+            </Link>
+            </Button>
+        </div>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-xl md:text-2xl">

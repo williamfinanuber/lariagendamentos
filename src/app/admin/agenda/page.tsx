@@ -6,7 +6,9 @@ import AgendaView from './AgendaView';
 import type { Booking, Procedure, Availability } from '@/lib/types';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Suspense, useEffect, useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 function AgendaData() {
   const [data, setData] = useState<{bookings: Booking[], procedures: Procedure[], availability: Availability} | null>(null);
@@ -47,6 +49,14 @@ export default function AgendaPage() {
   
   return (
     <div className="space-y-6">
+        <div className="flex justify-start">
+            <Button asChild variant="outline">
+            <Link href="/admin">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Voltar
+            </Link>
+            </Button>
+      </div>
         <Card>
             <CardHeader>
                 <CardTitle>Agenda de Clientes</CardTitle>

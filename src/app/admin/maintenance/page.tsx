@@ -5,7 +5,9 @@ import { getBookings } from '@/lib/firebase';
 import type { Booking } from '@/lib/types';
 import MaintenanceClientPage from './MaintenanceClientPage';
 import { useEffect, useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default function MaintenancePage() {
   const [completedBookings, setCompletedBookings] = useState<Booking[] | null>(null);
@@ -38,6 +40,14 @@ export default function MaintenancePage() {
   
   return (
     <div className="space-y-6">
+       <div className="flex justify-start">
+            <Button asChild variant="outline">
+            <Link href="/admin">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Voltar
+            </Link>
+            </Button>
+        </div>
       <MaintenanceClientPage completedBookings={completedBookings} />
     </div>
   );
