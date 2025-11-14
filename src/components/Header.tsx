@@ -18,7 +18,7 @@ export default function Header() {
         </Link>
         <nav className="flex items-center gap-2">
            <Button asChild variant="ghost">
-            <a href="https://maps.app.goo.gl/vSHErAosMmVnGMnx9" target="_blank" rel="noopener noreferrer">
+            <a href="https://maps.app.goo.gl/q3Mtmo15drnjUEoe7" target="_blank" rel="noopener noreferrer">
               <MapPin className="mr-2 h-4 w-4" />
               Localização
             </a>
