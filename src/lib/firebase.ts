@@ -129,11 +129,12 @@ export const deleteProcedure = async (id: string) => {
 // --- NEW AVAILABILITY LOGIC ---
 
 const defaultSettings: AvailabilitySettings = {
-  weekdays: [1, 2, 3, 4, 5, 6], // Mon-Sat
+  weekdays: [1, 2, 3, 4, 5], // Mon-Fri
   startTime: '08:00',
   endTime: '20:30',
   slotInterval: 30,
   sundayScheduling: false,
+  saturdayScheduling: true, // Saturday enabled by default
 };
 
 export const getAvailabilitySettings = async (): Promise<AvailabilitySettings> => {
@@ -153,10 +154,7 @@ export const getAvailabilitySettings = async (): Promise<AvailabilitySettings> =
 
 export const updateAvailabilitySettings = (settings: Partial<AvailabilitySettings>) => {
     const settingsDocRef = doc(db, "settings", "availability");
-    // Ensure weekdays are not overwritten, only sundayScheduling is updatable from the UI
-    const updateData = {
-        sundayScheduling: settings.sundayScheduling
-    }
+    const updateData = { ...settings };
     return setDoc(settingsDocRef, updateData, { merge: true });
 };
 
@@ -182,11 +180,14 @@ export const getAvailability = async (): Promise<Availability> => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Weekdays are fixed Mon-Sat, Sunday is optional
-    const standardWeekdays = [1, 2, 3, 4, 5, 6];
-    const activeWeekdays = settings.sundayScheduling 
-        ? [...standardWeekdays, 0] // Add Sunday if toggled
-        : standardWeekdays;
+    // Base weekdays are fixed Mon-Fri
+    const activeWeekdays: number[] = [...settings.weekdays];
+    if (settings.sundayScheduling) {
+        activeWeekdays.push(0); // Add Sunday if toggled
+    }
+    if (settings.saturdayScheduling) {
+        activeWeekdays.push(6); // Add Saturday if toggled
+    }
 
     // Generate availability for the next 60 days
     for (let i = 0; i < 60; i++) {

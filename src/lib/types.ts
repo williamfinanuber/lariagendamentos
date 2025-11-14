@@ -17,6 +17,7 @@ export interface AvailabilitySettings {
   endTime: string; // "HH:MM"
   slotInterval: number; // in minutes
   sundayScheduling: boolean;
+  saturdayScheduling: boolean;
 }
 
 export interface Booking {

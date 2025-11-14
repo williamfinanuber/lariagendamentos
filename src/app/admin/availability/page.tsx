@@ -15,7 +15,7 @@ import Link from 'next/link';
 export default function AvailabilityPage() {
   const [settings, setSettings] = useState<AvailabilitySettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
+  const [isSaving, setIsSaving] = useState<Record<string, boolean>>({});
   const { toast } = useToast();
 
   useEffect(() => {
@@ -34,23 +34,24 @@ export default function AvailabilityPage() {
     fetchSettings();
   }, [toast]);
 
-  const handleSundayToggle = async (isToggled: boolean) => {
+  const handleToggle = async (isToggled: boolean, field: 'saturdayScheduling' | 'sundayScheduling') => {
     if (!settings) return;
-    setIsSaving(true);
+    setIsSaving(prev => ({ ...prev, [field]: true }));
     try {
-        // Only update the sundayScheduling property
-        const newSettings = { sundayScheduling: isToggled };
+        const newSettings = { [field]: isToggled };
         await updateAvailabilitySettings(newSettings);
-        setSettings(prev => prev ? { ...prev, sundayScheduling: isToggled } : null);
+        setSettings(prev => prev ? { ...prev, ...newSettings } : null);
+        
+        const day = field === 'saturdayScheduling' ? 'sábado' : 'domingo';
         toast({
-            title: isToggled ? "Agenda de domingo ativada!" : "Agenda de domingo desativada.",
-            description: isToggled ? "Agora você pode receber agendamentos aos domingos." : "Os domingos não estarão mais disponíveis para agendamento."
+            title: isToggled ? `Agenda de ${day} ativada!` : `Agenda de ${day} desativada.`,
+            description: isToggled ? `Agora você pode receber agendamentos aos ${day}s.` : `Os ${day}s não estarão mais disponíveis para agendamento.`
         });
     } catch (error) {
-        console.error("Error updating Sunday scheduling:", error);
+        console.error(`Error updating ${field}:`, error);
         toast({ title: "Erro ao salvar alteração", variant: "destructive" });
     } finally {
-        setIsSaving(false);
+        setIsSaving(prev => ({ ...prev, [field]: false }));
     }
   };
   
@@ -78,10 +79,24 @@ export default function AvailabilityPage() {
               </CardTitle>
           </div>
           <CardDescription className="pt-2 text-sm md:text-base">
-            Sua agenda funciona de Segunda a Sábado por padrão. Use a opção abaixo para abrir sua agenda também aos Domingos.
+            Sua agenda funciona de Segunda a Sexta por padrão. Use as opções abaixo para gerenciar os finais de semana.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-4">
+            <div className="flex items-center space-x-4 rounded-md border p-4">
+                <div className="flex-1 space-y-1">
+                    <p className="text-sm font-medium leading-none">Abrir agenda aos Sábados</p>
+                    <p className="text-sm text-muted-foreground">
+                       {settings.saturdayScheduling ? "Sua agenda está aberta para agendamentos aos sábados." : "Sua agenda está fechada aos sábados."}
+                    </p>
+                </div>
+                <Switch
+                    checked={settings.saturdayScheduling}
+                    onCheckedChange={(isToggled) => handleToggle(isToggled, 'saturdayScheduling')}
+                    disabled={isSaving['saturdayScheduling']}
+                    aria-readonly
+                />
+            </div>
             <div className="flex items-center space-x-4 rounded-md border p-4">
                 <div className="flex-1 space-y-1">
                     <p className="text-sm font-medium leading-none">Abrir agenda aos Domingos</p>
@@ -91,8 +106,8 @@ export default function AvailabilityPage() {
                 </div>
                 <Switch
                     checked={settings.sundayScheduling}
-                    onCheckedChange={handleSundayToggle}
-                    disabled={isSaving}
+                    onCheckedChange={(isToggled) => handleToggle(isToggled, 'sundayScheduling')}
+                    disabled={isSaving['sundayScheduling']}
                     aria-readonly
                 />
             </div>
