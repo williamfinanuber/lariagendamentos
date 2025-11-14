@@ -82,10 +82,10 @@ export default function RemindersClientPage({ bookings: initialBookings }: Remin
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Cliente</TableHead>
-              <TableHead>Horário</TableHead>
-              <TableHead>Procedimento</TableHead>
-              <TableHead className="text-right">Ação</TableHead>
+              <TableHead className="px-2 text-xs">Cliente</TableHead>
+              <TableHead className="px-2 text-xs">Horário</TableHead>
+              <TableHead className="px-2 text-xs">Procedimento</TableHead>
+              <TableHead className="text-right px-2 text-xs">Ação</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -95,14 +95,14 @@ export default function RemindersClientPage({ bookings: initialBookings }: Remin
                 const loading = isLoading[booking.id];
                 return (
                   <TableRow key={booking.id}>
-                    <TableCell className="font-medium text-sm md:text-base">{booking.clientName}</TableCell>
-                    <TableCell className="font-medium text-sm md:text-base">{booking.time}</TableCell>
-                    <TableCell className="text-sm md:text-base">{booking.procedureName}</TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="font-medium text-xs p-2">{booking.clientName}</TableCell>
+                    <TableCell className="font-medium text-xs p-2">{booking.time}</TableCell>
+                    <TableCell className="text-xs p-2">{booking.procedureName}</TableCell>
+                    <TableCell className="text-right p-2">
                       <Button
                         size="sm"
                         className={cn(
-                          "text-xs md:text-sm",
+                          "text-xs h-8 px-2",
                           isSent 
                             ? "bg-gray-600 hover:bg-gray-700 cursor-not-allowed" 
                             : "bg-green-500 hover:bg-green-600"
@@ -110,7 +110,7 @@ export default function RemindersClientPage({ bookings: initialBookings }: Remin
                         onClick={() => handleSendReminder(booking)}
                         disabled={isSent || loading}
                       >
-                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : (isSent ? <Check className="mr-2" /> : <MessageSquare className="mr-2" />)}
+                        {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : (isSent ? <Check className="mr-1.5 h-3 w-3" /> : <MessageSquare className="mr-1.5 h-3 w-3" />)}
                         {isSent ? 'Enviado' : 'Enviar'}
                       </Button>
                     </TableCell>
