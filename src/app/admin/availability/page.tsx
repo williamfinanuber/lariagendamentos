@@ -11,13 +11,7 @@ import { getAvailabilitySettings, updateAvailabilitySettings } from "@/lib/fireb
 import type { AvailabilitySettings } from "@/lib/types";
 
 export default function AvailabilityPage() {
-  const [settings, setSettings] = useState<AvailabilitySettings>({
-    weekdays: [1, 2, 3, 4, 5, 6],
-    startTime: '08:00',
-    endTime: '20:30',
-    slotInterval: 30,
-    sundayScheduling: false,
-  });
+  const [settings, setSettings] = useState<AvailabilitySettings | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
@@ -39,11 +33,13 @@ export default function AvailabilityPage() {
   }, [toast]);
 
   const handleSundayToggle = async (isToggled: boolean) => {
+    if (!settings) return;
     setIsSaving(true);
     try {
-        const newSettings = { ...settings, sundayScheduling: isToggled };
+        // Only update the sundayScheduling property
+        const newSettings = { sundayScheduling: isToggled };
         await updateAvailabilitySettings(newSettings);
-        setSettings(newSettings);
+        setSettings(prev => prev ? { ...prev, sundayScheduling: isToggled } : null);
         toast({
             title: isToggled ? "Agenda de domingo ativada!" : "Agenda de domingo desativada.",
             description: isToggled ? "Agora você pode receber agendamentos aos domingos." : "Os domingos não estarão mais disponíveis para agendamento."
@@ -56,7 +52,7 @@ export default function AvailabilityPage() {
     }
   };
   
-  if (isLoading) {
+  if (isLoading || !settings) {
     return (
       <div className="flex justify-center items-center h-64">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -72,13 +68,13 @@ export default function AvailabilityPage() {
             <Calendar /> Configurações de Disponibilidade
           </CardTitle>
           <CardDescription className="text-sm md:text-base">
-            Defina as regras gerais para a sua agenda. O sistema gerará os horários disponíveis automaticamente.
+            Sua agenda funciona de Segunda a Sábado por padrão. Use a opção abaixo para abrir sua agenda também aos Domingos.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
             <div className="flex items-center space-x-4 rounded-md border p-4">
                 <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium leading-none">Agenda aos Domingos</p>
+                    <p className="text-sm font-medium leading-none">Abrir agenda aos Domingos</p>
                     <p className="text-sm text-muted-foreground">
                        {settings.sundayScheduling ? "Sua agenda está aberta para agendamentos aos domingos." : "Sua agenda está fechada aos domingos."}
                     </p>

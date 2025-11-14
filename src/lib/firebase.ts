@@ -151,10 +151,15 @@ export const getAvailabilitySettings = async (): Promise<AvailabilitySettings> =
     }
 };
 
-export const updateAvailabilitySettings = (settings: AvailabilitySettings) => {
+export const updateAvailabilitySettings = (settings: Partial<AvailabilitySettings>) => {
     const settingsDocRef = doc(db, "settings", "availability");
-    return setDoc(settingsDocRef, settings, { merge: true });
+    // Ensure weekdays are not overwritten, only sundayScheduling is updatable from the UI
+    const updateData = {
+        sundayScheduling: settings.sundayScheduling
+    }
+    return setDoc(settingsDocRef, updateData, { merge: true });
 };
+
 
 function generateTimeSlots(startStr: string, endStr: string, interval: number): string[] {
     const slots = [];
@@ -177,9 +182,11 @@ export const getAvailability = async (): Promise<Availability> => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    // Weekdays are fixed Mon-Sat, Sunday is optional
+    const standardWeekdays = [1, 2, 3, 4, 5, 6];
     const activeWeekdays = settings.sundayScheduling 
-        ? [...settings.weekdays, 0] // Add Sunday if toggled
-        : settings.weekdays.filter(d => d !== 0); // Make sure Sunday is not there if not toggled
+        ? [...standardWeekdays, 0] // Add Sunday if toggled
+        : standardWeekdays;
 
     // Generate availability for the next 60 days
     for (let i = 0; i < 60; i++) {
