@@ -127,28 +127,15 @@ export default function ClientsPageClient({ clients }: ClientsPageClientProps) {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center gap-4">
-            <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+        <div className="flex items-center gap-4 mb-4">
+             <Button asChild variant="outline" size="sm" className="flex-shrink-0">
                 <Link href="/admin">
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Voltar
                 </Link>
             </Button>
-            <CardTitle className="text-xl md:text-2xl">{getPageTitle()}</CardTitle>
-            <div className="flex gap-2 ml-auto">
-                {filter === 'today' || filter === 'month' ? (
-                    <Button onClick={() => handleFilterToggle('all')} variant="outline">
-                    <Gift className="mr-2" />
-                    Mostrar Todos
-                    </Button>
-                ) : (
-                    <Button onClick={() => handleFilterToggle('month')} variant="outline">
-                    <Gift className="mr-2" />
-                    Aniversariantes do Mês
-                    </Button>
-                )}
-            </div>
         </div>
+        <CardTitle className="text-xl md:text-2xl">{getPageTitle()}</CardTitle>
         <CardDescription className="pt-2 text-sm">
             {filter === 'today' ? 'Envie uma mensagem de parabéns para seus clientes.' : 'Visualize todos os seus clientes cadastrados.'}
         </CardDescription>
