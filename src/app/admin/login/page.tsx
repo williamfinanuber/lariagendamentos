@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
@@ -15,10 +15,18 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [correctPassword, setCorrectPassword] = useState('123456');
   const router = useRouter();
   const { toast } = useToast();
+
+  useEffect(() => {
+    // This runs on the client, so localStorage is available.
+    const storedPassword = localStorage.getItem('adminPassword');
+    if (storedPassword) {
+      setCorrectPassword(storedPassword);
+    }
+  }, []);
   
-  const correctPassword = '123456';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,7 +82,7 @@ export default function LoginPage() {
                 </Button>
                 <Button asChild variant="outline" className="w-full">
                     <Link href="/">
-                        <ArrowLeft className="mr-2" />
+                        <ArrowLeft className="mr-2 h-4 w-4" />
                         Voltar à tela inicial
                     </Link>
                 </Button>

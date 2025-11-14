@@ -1,8 +1,9 @@
+
 "use client"
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Home, LayoutDashboard, CalendarDays, Package, CalendarCheck, Calendar, Users, DollarSign, Wrench, MoreVertical, Bell, Eye, LogOut, CalendarClock } from 'lucide-react';
+import { Home, LayoutDashboard, CalendarDays, Package, CalendarCheck, Calendar, Users, DollarSign, Wrench, MoreVertical, Bell, Eye, LogOut, CalendarClock, KeyRound } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import ChangePasswordDialog from './ChangePasswordDialog';
 
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -20,11 +22,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const { toast } = useToast();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
 
     useEffect(() => {
         let authStatus = false;
         try {
-            // This check will only run on the client side
             authStatus = sessionStorage.getItem('isAdminAuthenticated') === 'true';
         } catch (e) {
             console.error("Could not access sessionStorage.");
@@ -67,18 +69,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         return <div className="flex h-screen w-full items-center justify-center">Carregando...</div>;
     }
     
-    // If we're on the login page, render it directly without the layout shell.
     if (pathname === '/admin/login') {
         return children;
     }
     
-    // If not authenticated and not on the login page, show a loading/redirecting message.
     if (!isAuthenticated) {
         return <div className="flex h-screen w-full items-center justify-center">Redirecionando para o login...</div>;
     }
     
     return (
         <div className="flex h-screen w-full bg-background">
+            <ChangePasswordDialog isOpen={isPasswordDialogOpen} onOpenChange={setIsPasswordDialogOpen} />
             <div className="flex flex-col h-full w-full">
                  <header className="flex h-14 lg:h-[60px] items-center justify-between gap-4 border-b bg-muted/40 px-6 sticky top-0 z-30">
                     <div className="flex-1">
@@ -109,6 +110,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                         </Link>
                                     </DropdownMenuItem>
                                 ))}
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onSelect={() => setIsPasswordDialogOpen(true)}>
+                                    <KeyRound className="mr-2 h-4 w-4" />
+                                    <span>Alterar Senha</span>
+                                </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                  <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600">
                                     <LogOut className="mr-2 h-4 w-4" />
