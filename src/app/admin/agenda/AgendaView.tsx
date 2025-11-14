@@ -337,3 +337,5 @@ export default function AgendaView({ initialBookings, procedures, initialAvailab
     </>
   );
 }
+
+    
