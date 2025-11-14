@@ -5,7 +5,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Calendar } from '@/components/ui/calendar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import type { Availability, Booking, Procedure } from '@/lib/types';
 import { Calendar as CalendarIcon, Clock, User, CheckCircle, Loader2, PlusCircle, Trash2, Check, X, ArrowLeft } from 'lucide-react';
@@ -198,17 +198,23 @@ export default function AgendaView({ initialBookings, procedures, initialAvailab
 
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
       <Card className="lg:col-span-2">
-        <CardHeader className="flex flex-row justify-between items-center">
-            <div className="flex items-center gap-4">
-                <Button asChild variant="outline" size="sm" className="flex-shrink-0">
-                    <Link href="/admin">
-                        <ArrowLeft className="mr-2 h-4 w-4" />
-                        Voltar
-                    </Link>
-                </Button>
-                <CardTitle className="text-xl md:text-2xl">Agenda</CardTitle>
-            </div>
-           <Button size="sm" onClick={() => setIsDialogOpen(true)}><PlusCircle className="mr-2 h-4 w-4" />Agendar</Button>
+        <CardHeader>
+           <div className="flex justify-between items-center mb-4">
+               <Button asChild variant="outline" size="sm">
+                  <Link href="/admin">
+                      <ArrowLeft className="mr-2 h-4 w-4" />
+                      Voltar
+                  </Link>
+              </Button>
+              <Button size="sm" onClick={() => setIsDialogOpen(true)}>
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Agendar
+              </Button>
+           </div>
+           <CardTitle className="text-xl md:text-2xl">Agenda</CardTitle>
+           <CardDescription className="text-xs pt-1">
+              As cores no calendário indicam o status dos agendamentos no dia.
+           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center gap-4">
