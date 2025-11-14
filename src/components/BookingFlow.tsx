@@ -101,6 +101,19 @@ function BookingFlowContent({ procedures, availability, existingBooking = null }
     return (date: Date) => date < today;
   }, []);
 
+  const formatDuration = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    if (hours > 0 && remainingMinutes > 0) {
+      return `${hours}h e ${remainingMinutes}min`;
+    } else if (hours > 0) {
+      return `${hours}h`;
+    } else {
+      return `${remainingMinutes}min`;
+    }
+  };
+
 
   function handleDateSelect(date: Date | undefined) {
     if (date) {
@@ -215,7 +228,7 @@ function BookingFlowContent({ procedures, availability, existingBooking = null }
           <p className="text-primary font-bold text-lg">{selectedProcedure.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
           <div className="flex items-center text-sm text-muted-foreground">
               <Clock className="w-4 h-4 mr-1.5" />
-              <span>{selectedProcedure.duration} min</span>
+              <span>{formatDuration(selectedProcedure.duration)}</span>
           </div>
         </CardFooter>
       </Card>

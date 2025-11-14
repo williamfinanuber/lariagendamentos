@@ -20,6 +20,19 @@ export default function ProceduresList({ procedures }: ProceduresListProps) {
     router.push(`/agendar?procedureId=${procedure.id}`);
   }
 
+  const formatDuration = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    if (hours > 0 && remainingMinutes > 0) {
+      return `${hours}h e ${remainingMinutes}min`;
+    } else if (hours > 0) {
+      return `${hours}h`;
+    } else {
+      return `${remainingMinutes}min`;
+    }
+  };
+
   return (
     <Card>
       <div className="p-6 pb-0">
@@ -57,7 +70,7 @@ export default function ProceduresList({ procedures }: ProceduresListProps) {
                 <p className="text-sm text-muted-foreground line-clamp-2">{procedure.description}</p>
                  <div className="flex items-center text-sm text-muted-foreground pt-2">
                     <Clock className="w-4 h-4 mr-1.5" />
-                    <span>Duração: {procedure.duration} min</span>
+                    <span>Duração: {formatDuration(procedure.duration)}</span>
                 </div>
               </CardContent>
               <CardFooter className="p-4 pt-2 flex justify-between items-center mt-auto">

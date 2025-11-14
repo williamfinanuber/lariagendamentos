@@ -17,7 +17,7 @@ function ConfirmationContent() {
   const time = searchParams.get('time');
   const name = searchParams.get('name');
   const price = parseFloat(searchParams.get('price') || '0');
-  const duration = searchParams.get('duration');
+  const duration = parseInt(searchParams.get('duration') || '0', 10);
 
   const formattedDate = dateStr ? format(parseISO(dateStr), 'EEEE, dd \'de\' MMMM \'de\' yyyy', { locale: ptBR }) : 'Data não informada';
   const formattedApiDate = dateStr ? format(parseISO(dateStr), 'dd/MM/yyyy') : 'Data não informada';
@@ -34,6 +34,20 @@ function ConfirmationContent() {
   );
 
   const whatsappUrl = `https://wa.me/5563984259190?text=${whatsappMessage}`;
+  
+  const formatDuration = (minutes: number) => {
+    if (isNaN(minutes) || minutes <= 0) return null;
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    if (hours > 0 && remainingMinutes > 0) {
+      return `${hours}h e ${remainingMinutes}min`;
+    } else if (hours > 0) {
+      return `${hours}h`;
+    } else {
+      return `${remainingMinutes}min`;
+    }
+  };
 
   return (
     <div className="flex justify-center items-center py-8 sm:py-12 md:py-24 px-4">
@@ -53,7 +67,7 @@ function ConfirmationContent() {
               <p className="flex items-center gap-2"><strong>Procedimento:</strong> {procedure}</p>
               <p className="flex items-center gap-2"><Calendar className="text-accent w-5 h-5" /> <strong>Data:</strong> {formattedDate}</p>
               <p className="flex items-center gap-2"><Clock className="text-accent w-5 h-5" /> <strong>Hora:</strong> {time}</p>
-              {duration && <p className="flex items-center gap-2"><Timer className="text-accent w-5 h-5" /> <strong>Duração:</strong> {duration} min</p>}
+              {duration && <p className="flex items-center gap-2"><Timer className="text-accent w-5 h-5" /> <strong>Duração:</strong> {formatDuration(duration)}</p>}
             </CardContent>
           </Card>
           <div className="space-y-2">

@@ -108,6 +108,21 @@ export default function DynamicAgendaView({ initialBookings, onBookingUpdate }: 
     }
   }
 
+  const formatDuration = (minutes: number) => {
+    if (isNaN(minutes) || minutes <= 0) return null;
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    if (hours > 0 && remainingMinutes > 0) {
+      return `${hours}h e ${remainingMinutes}min`;
+    } else if (hours > 0) {
+      return `${hours}h`;
+    } else {
+      return `${remainingMinutes}min`;
+    }
+  };
+
+
   return (
     <Card className="overflow-hidden">
       <CardHeader className="flex flex-col sm:flex-row justify-between items-center p-4 border-b">
@@ -189,7 +204,7 @@ export default function DynamicAgendaView({ initialBookings, onBookingUpdate }: 
                                         <p className="font-bold">{booking.procedureName}</p>
                                         <p>Cliente: {booking.clientName}</p>
                                         <p>Horário: {booking.time}</p>
-                                        <p>Duração: {booking.duration} min</p>
+                                        <p>Duração: {formatDuration(booking.duration)}</p>
                                         {isCompleted && <p className="font-semibold text-green-600">Status: Finalizado</p>}
                                         {!isCompleted && <p className="text-muted-foreground text-xs mt-1">Clique para ver as ações</p>}
                                     </TooltipContent>
