@@ -21,7 +21,7 @@ function ConfirmationContent() {
 
   const formattedDate = dateStr ? format(parseISO(dateStr), 'EEEE, dd \'de\' MMMM \'de\' yyyy', { locale: ptBR }) : 'Data não informada';
   const formattedApiDate = dateStr ? format(parseISO(dateStr), 'dd/MM/yyyy') : 'Data não informada';
-  const signalValue = price * 0.30;
+  const signalValue = price * 0.40;
   
   const whatsappMessage = encodeURIComponent(
     `Olá! Meu nome é ${name}. Gostaria de confirmar meu agendamento:\n\n` +
@@ -29,7 +29,7 @@ function ConfirmationContent() {
     `*Data:* ${formattedApiDate}\n` +
     `*Hora:* ${time}\n` +
     `*Valor Total:* ${price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}\n` +
-    `*Sinal (30%):* ${signalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}\n\n` +
+    `*Sinal (40%):* ${signalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}\n\n` +
     `Gostaria de pagar o valor do sinal para finalizar meu agendamento.`
   );
 

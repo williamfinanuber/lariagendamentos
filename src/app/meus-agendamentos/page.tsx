@@ -85,7 +85,7 @@ export default function MyBookingsPage() {
   
   const generateWhatsAppLink = (booking: Booking) => {
     const formattedApiDate = format(parseISO(booking.date), 'dd/MM/yyyy');
-    const signalValue = booking.price * 0.30;
+    const signalValue = booking.price * 0.40;
     
     const whatsappMessage = encodeURIComponent(
       `Olá! Meu nome é ${booking.clientName}. Gostaria de confirmar meu agendamento:\n\n` +
@@ -93,7 +93,7 @@ export default function MyBookingsPage() {
       `*Data:* ${formattedApiDate}\n` +
       `*Hora:* ${booking.time}\n` +
       `*Valor Total:* ${booking.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}\n` +
-      `*Sinal (30%):* ${signalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}\n\n` +
+      `*Sinal (40%):* ${signalValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}\n\n` +
       `Gostaria de pagar o valor do sinal para finalizar meu agendamento.`
     );
 
