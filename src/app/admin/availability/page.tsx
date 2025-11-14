@@ -66,20 +66,18 @@ export default function AvailabilityPage() {
     <div className="space-y-8">
       <Card>
         <CardHeader>
-           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div className="flex items-center gap-4">
-                  <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+           <div className="flex items-center gap-4">
+              <Button asChild variant="outline" size="sm" className="flex-shrink-0">
                   <Link href="/admin">
                       <ArrowLeft className="mr-2 h-4 w-4" />
                       Voltar
                   </Link>
-                  </Button>
-                  <CardTitle className="flex items-center gap-2 text-xl md:text-2xl">
-                      <Calendar /> Configurações de Disponibilidade
-                  </CardTitle>
-              </div>
+              </Button>
+              <CardTitle className="text-xl md:text-2xl">
+                  Configurações de Disponibilidade
+              </CardTitle>
           </div>
-          <CardDescription className="text-sm md:text-base pt-2">
+          <CardDescription className="pt-2 text-sm md:text-base">
             Sua agenda funciona de Segunda a Sábado por padrão. Use a opção abaixo para abrir sua agenda também aos Domingos.
           </CardDescription>
         </CardHeader>

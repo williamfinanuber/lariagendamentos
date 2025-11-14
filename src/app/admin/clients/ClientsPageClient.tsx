@@ -7,9 +7,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { format, parseISO, isToday, parse } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Gift, MessageSquare, Check } from 'lucide-react';
+import { Gift, MessageSquare, Check, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 interface Client {
   name: string;
@@ -126,9 +127,15 @@ export default function ClientsPageClient({ clients }: ClientsPageClientProps) {
   return (
     <Card>
       <CardHeader>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <CardTitle className="flex items-center gap-2 text-xl md:text-2xl">{getPageTitle()}</CardTitle>
-            <div className="flex gap-2">
+        <div className="flex items-center gap-4">
+            <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+                <Link href="/admin">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Voltar
+                </Link>
+            </Button>
+            <CardTitle className="text-xl md:text-2xl">{getPageTitle()}</CardTitle>
+            <div className="flex gap-2 ml-auto">
                 {filter === 'today' || filter === 'month' ? (
                     <Button onClick={() => handleFilterToggle('all')} variant="outline">
                     <Gift className="mr-2" />
@@ -142,7 +149,7 @@ export default function ClientsPageClient({ clients }: ClientsPageClientProps) {
                 )}
             </div>
         </div>
-        <CardDescription className="text-sm pt-2">
+        <CardDescription className="pt-2 text-sm">
             {filter === 'today' ? 'Envie uma mensagem de parabéns para seus clientes.' : 'Visualize todos os seus clientes cadastrados.'}
         </CardDescription>
       </CardHeader>

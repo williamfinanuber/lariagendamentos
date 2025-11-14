@@ -41,22 +41,6 @@ export default function MaintenancePage() {
   
   return (
     <div className="space-y-6">
-        <Card>
-            <CardHeader>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                        <Button asChild variant="outline" size="sm" className="flex-shrink-0">
-                            <Link href="/admin">
-                                <ArrowLeft className="mr-2 h-4 w-4" />
-                                Voltar
-                            </Link>
-                        </Button>
-                        <CardTitle className="text-xl md:text-2xl">Manutenção e Configurações</CardTitle>
-                    </div>
-                </div>
-                 <CardDescription className="text-sm pt-2">Execute ações de manutenção e gerencie configurações avançadas do sistema.</CardDescription>
-            </CardHeader>
-        </Card>
       <MaintenanceClientPage completedBookings={completedBookings} />
     </div>
   );

@@ -50,22 +50,6 @@ export default function FinancePage() {
 
   return (
     <div className="space-y-6">
-       <Card>
-        <CardHeader>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div className="flex items-center gap-4">
-                    <Button asChild variant="outline" size="sm" className="flex-shrink-0">
-                        <Link href="/admin">
-                            <ArrowLeft className="mr-2 h-4 w-4" />
-                            Voltar
-                        </Link>
-                    </Button>
-                    <CardTitle className="text-xl md:text-2xl">Controle Financeiro</CardTitle>
-                </div>
-            </div>
-            <CardDescription className="text-sm pt-2">Registre suas receitas e despesas para acompanhar a saúde do seu negócio.</CardDescription>
-        </CardHeader>
-      </Card>
         <FinancePageClient 
         initialTransactions={financeData.transactions} 
         initialCategories={financeData.categories}

@@ -20,6 +20,7 @@ import {
   Pencil,
   AlertTriangle,
   KeyRound,
+  ArrowLeft
 } from 'lucide-react';
 
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
@@ -66,6 +67,7 @@ import { useToast } from '@/hooks/use-toast';
 import { addTransaction, deleteTransaction, addCategory, deleteCategory, getTransactions, getCategories, getBookings, updateTransaction, deleteAllTransactions } from '@/lib/firebase';
 import type { Transaction, Category, Booking } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
 
 
 const transactionSchema = z.object({
@@ -457,7 +459,20 @@ export default function FinancePageClient({ initialTransactions, initialCategori
 
   return (
     <>
-    <div className="space-y-6">
+    <Card>
+        <CardHeader>
+            <div className="flex items-center gap-4">
+                <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+                    <Link href="/admin">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Voltar
+                    </Link>
+                </Button>
+                <CardTitle className="text-xl md:text-2xl">Controle Financeiro</CardTitle>
+            </div>
+            <CardDescription className="pt-2 text-sm">Registre suas receitas e despesas para acompanhar a saúde do seu negócio.</CardDescription>
+        </CardHeader>
+      <CardContent className="space-y-6">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         
         <Dialog open={isTransactionDialogOpen} onOpenChange={setIsTransactionDialogOpen}>
@@ -693,7 +708,8 @@ export default function FinancePageClient({ initialTransactions, initialCategori
             </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </CardContent>
+    </Card>
 
     {/* Date Range Selector Dialog */}
     <Dialog open={isDateSelectorOpen} onOpenChange={setIsDateSelectorOpen}>

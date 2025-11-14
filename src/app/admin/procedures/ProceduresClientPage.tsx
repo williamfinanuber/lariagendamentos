@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { PlusCircle, MoreHorizontal, Pencil, Trash2, Upload, Loader2 } from 'lucide-react';
+import { PlusCircle, MoreHorizontal, Pencil, Trash2, Upload, Loader2, ArrowLeft } from 'lucide-react';
 import type { Procedure } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -25,6 +25,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { getProcedures, addProcedure, updateProcedure, deleteProcedure } from '@/lib/firebase';
+import Link from 'next/link';
 
 interface ProceduresClientPageProps {
   initialProcedures: Procedure[];
@@ -206,10 +207,18 @@ export default function ProceduresClientPage({ initialProcedures }: ProceduresCl
     <>
       <Card>
         <CardHeader className="flex flex-col gap-y-2 md:flex-row md:items-center md:justify-between">
-          <div>
-              <CardTitle className="text-xl md:text-2xl">Procedimentos</CardTitle>
-              <CardDescription className="text-sm">Gerencie os procedimentos oferecidos no studio.</CardDescription>
-          </div>
+            <div className="flex items-center gap-4">
+                <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+                    <Link href="/admin">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Voltar
+                    </Link>
+                </Button>
+                <div>
+                    <CardTitle className="text-xl md:text-2xl">Procedimentos</CardTitle>
+                    <CardDescription className="text-sm">Gerencie os procedimentos oferecidos no studio.</CardDescription>
+                </div>
+            </div>
             <Button size="sm" className="gap-1" onClick={() => openDialog()}>
                 <PlusCircle className="h-4 w-4" />
                 Adicionar Procedimento

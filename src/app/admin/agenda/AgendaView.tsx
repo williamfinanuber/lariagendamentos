@@ -8,7 +8,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import type { Availability, Booking, Procedure } from '@/lib/types';
-import { Calendar as CalendarIcon, Clock, User, CheckCircle, Loader2, PlusCircle, Trash2, Check, X } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, User, CheckCircle, Loader2, PlusCircle, Trash2, Check, X, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { markBookingAsCompleted, getBookings, getAvailability, updateBookingStatus, deleteBookingAndRestoreTime } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
@@ -24,6 +24,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 
 interface AgendaViewProps {
@@ -198,7 +199,15 @@ export default function AgendaView({ initialBookings, procedures, initialAvailab
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
       <Card className="lg:col-span-2">
         <CardHeader className="flex flex-row justify-between items-center">
-          <CardTitle className="flex items-center gap-2 text-base md:text-xl"><CalendarIcon /> Calendário</CardTitle>
+            <div className="flex items-center gap-4">
+                <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+                    <Link href="/admin">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Voltar
+                    </Link>
+                </Button>
+                <CardTitle className="text-xl md:text-2xl">Agenda</CardTitle>
+            </div>
            <Button size="sm" onClick={() => setIsDialogOpen(true)}><PlusCircle className="mr-2 h-4 w-4" />Agendar</Button>
         </CardHeader>
         <CardContent>

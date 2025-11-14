@@ -6,13 +6,14 @@ import { format, startOfWeek, addDays, subDays, isSameDay } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Clock, ChevronLeft, ChevronRight, User, XCircle, Ban, Loader2, Info } from 'lucide-react';
+import { CheckCircle, Clock, ChevronLeft, ChevronRight, User, XCircle, Ban, Loader2, Info, ArrowLeft } from 'lucide-react';
 import type { Booking } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useToast } from '@/hooks/use-toast';
 import { markBookingAsCompleted, updateBookingStatus } from '@/lib/firebase';
+import Link from 'next/link';
 
 interface DynamicAgendaViewProps {
   initialBookings: Booking[];
@@ -126,9 +127,17 @@ export default function DynamicAgendaView({ initialBookings, onBookingUpdate }: 
   return (
     <Card className="overflow-hidden">
       <CardHeader className="flex flex-col sm:flex-row justify-between items-center p-4 border-b">
-        <CardTitle className="text-base md:text-xl font-semibold">
-           {format(weekDays[0], "dd 'de' MMM", { locale: ptBR })} - {format(weekDays[6], "dd 'de' MMM 'de' yyyy", { locale: ptBR })}
-        </CardTitle>
+        <div className="flex items-center gap-4">
+            <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+                <Link href="/admin">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Voltar
+                </Link>
+            </Button>
+            <CardTitle className="text-base md:text-xl font-semibold">
+              {format(weekDays[0], "dd 'de' MMM", { locale: ptBR })} - {format(weekDays[6], "dd 'de' MMM 'de' yyyy", { locale: ptBR })}
+            </CardTitle>
+        </div>
         <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" onClick={handleToday}>Hoje</Button>
             <Button variant="ghost" size="icon" onClick={handlePreviousWeek}><ChevronLeft /></Button>

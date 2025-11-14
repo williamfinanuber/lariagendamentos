@@ -19,6 +19,7 @@ import {
   FolderPlus,
   AlertTriangle,
   Search,
+  ArrowLeft,
 } from 'lucide-react';
 
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
@@ -65,6 +66,7 @@ import { Badge } from '@/components/ui/badge';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import Link from 'next/link';
 
 const productSchema = z.object({
   id: z.string().optional(),
@@ -318,149 +320,152 @@ export default function StockClientPage({ initialProducts, initialCategories }: 
 
   return (
     <>
-    <div className="space-y-6">
-       <Tabs defaultValue="products">
-        <TabsList className="grid w-full grid-cols-2 text-xs md:text-sm">
-            <TabsTrigger value="products">Produtos</TabsTrigger>
-            <TabsTrigger value="categories">Categorias</TabsTrigger>
-        </TabsList>
-        <TabsContent value="products">
-            <Card>
-                <CardHeader>
+    <Card>
+        <CardHeader>
+            <div className="flex items-center gap-4">
+                <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+                    <Link href="/admin">
+                        <ArrowLeft className="mr-2 h-4 w-4" />
+                        Voltar
+                    </Link>
+                </Button>
+                <CardTitle className="text-xl md:text-2xl">Controle de Estoque</CardTitle>
+            </div>
+            <CardDescription className="pt-2 text-sm">Gerencie os produtos e materiais do seu salão.</CardDescription>
+        </CardHeader>
+        <CardContent>
+            <Tabs defaultValue="products">
+                <TabsList className="grid w-full grid-cols-2 text-xs md:text-sm">
+                    <TabsTrigger value="products">Produtos</TabsTrigger>
+                    <TabsTrigger value="categories">Categorias</TabsTrigger>
+                </TabsList>
+                <TabsContent value="products" className="pt-4">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                        <CardTitle className="text-base md:text-xl">Lista de Produtos</CardTitle>
-                        <Button onClick={() => openProductDialog()}><PlusCircle className="mr-2 h-4 w-4" /> Novo Produto</Button>
+                        <div className="relative flex-1">
+                            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                placeholder="Buscar por nome do produto..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="pl-8 w-full md:w-1/2 lg:w-1/3"
+                            />
+                        </div>
+                        <Button onClick={() => openProductDialog()} size="sm"><PlusCircle className="mr-2 h-4 w-4" /> Novo Produto</Button>
                     </div>
-                    <CardDescription className="text-sm pt-2">Controle as entradas e saídas e saiba quando comprar mais.</CardDescription>
-                    <div className="relative pt-2">
-                        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            placeholder="Buscar por nome do produto..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-8 w-full md:w-1/2 lg:w-1/3"
-                        />
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                        <TableRow>
-                            <TableHead>Produto</TableHead>
-                            <TableHead>Qtd.</TableHead>
-                            <TableHead className="hidden md:table-cell">Categoria</TableHead>
-                            <TableHead className="text-right">Ações</TableHead>
-                        </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                        {sortedAndFilteredProducts.map(p => (
-                            <TableRow key={p.id}>
-                            <TableCell className="font-medium text-xs md:text-sm">{p.name}</TableCell>
-                            <TableCell className={cn("text-xs md:text-sm font-semibold", getQuantityClass(p.quantity))}>
-                                {p.quantity === 0 && <AlertTriangle className="inline-block h-4 w-4 mr-1" />}
-                                {p.quantity}
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell text-xs md:text-sm"><Badge variant="secondary">{p.categoryName}</Badge></TableCell>
-                            <TableCell className="text-right">
-                               <DropdownMenu>
-                                  <DropdownMenuTrigger asChild>
-                                    <Button aria-haspopup="true" size="icon" variant="ghost" disabled={isLoading}>
-                                      <MoreHorizontal className="h-4 w-4" />
-                                      <span className="sr-only">Menu</span>
-                                    </Button>
-                                  </DropdownMenuTrigger>
-                                  <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                                    <DropdownMenuItem onClick={() => openMovementDialog(p, 'in')}>
-                                      <ArrowUp className="mr-2 h-4 w-4 text-green-500" /> Entrada
-                                    </DropdownMenuItem>
-                                     <DropdownMenuItem onClick={() => openMovementDialog(p, 'out')}>
-                                      <ArrowDown className="mr-2 h-4 w-4 text-red-500" /> Saída
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onClick={() => openProductDialog(p)}>
-                                      <Pencil className="mr-2 h-4 w-4" /> Editar
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem className="text-red-600 focus:text-red-600 focus:bg-red-50" onClick={() => handleDeleteProduct(p.id)}>
-                                      <Trash2 className="mr-2 h-4 w-4" /> Deletar
-                                    </DropdownMenuItem>
-                                  </DropdownMenuContent>
-                                </DropdownMenu>
-                            </TableCell>
-                            </TableRow>
-                        ))}
-                        {sortedAndFilteredProducts.length === 0 && (
+                    <div className="mt-4 border rounded-md">
+                        <Table>
+                            <TableHeader>
                             <TableRow>
-                                <TableCell colSpan={4} className="text-center h-24 text-sm">
-                                    {searchTerm ? 'Nenhum produto encontrado com este nome.' : 'Nenhum produto cadastrado.'}
-                                </TableCell>
+                                <TableHead>Produto</TableHead>
+                                <TableHead>Qtd.</TableHead>
+                                <TableHead className="hidden md:table-cell">Categoria</TableHead>
+                                <TableHead className="text-right">Ações</TableHead>
                             </TableRow>
-                        )}
-                        </TableBody>
-                    </Table>
-                </CardContent>
-            </Card>
-        </TabsContent>
-        <TabsContent value="categories">
-            <Card>
-                <CardHeader>
-                    <CardTitle className="text-base md:text-xl">Categorias de Produtos</CardTitle>
-                    <CardDescription className="text-sm">Adicione ou remova categorias para organizar seu estoque.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                   <div className="flex flex-col sm:flex-row gap-2 max-w-lg">
-                       <Input 
-                        placeholder="Nova categoria..." 
-                        value={newCategoryName}
-                        onChange={(e) => setNewCategoryName(e.target.value)}
-                       />
-                       <div className="flex gap-2">
-                        <Button onClick={handleAddCategory} disabled={isCategoryLoading} className="w-full sm:w-auto">
-                            {isCategoryLoading ? <Loader2 className="animate-spin" /> : <FolderPlus className="mr-2 h-4 w-4" />}
-                            Adicionar
-                        </Button>
-                        {categories.length > 0 && (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                {/* The TooltipTrigger needs a child, so we wrap the button */}
-                                <div>
-                                   <Button 
-                                    variant="destructive" 
-                                    onClick={handleClearCategories} 
-                                    disabled={isCategoryLoading || products.length > 0}
-                                    className="w-full sm:w-auto"
-                                >
-                                    <Trash2 className="mr-2 h-4 w-4"/>
-                                    Limpar Tudo
-                                  </Button>
-                                </div>
-                              </TooltipTrigger>
-                              {products.length > 0 && (
-                                <TooltipContent>
-                                  <p>Exclua todos os produtos antes de limpar as categorias.</p>
-                                </TooltipContent>
-                              )}
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
-                       </div>
-                   </div>
-                   <div className="space-y-2">
-                       {categories.map(cat => (
-                           <div key={cat.id} className="flex items-center justify-between bg-muted p-2 rounded-md text-sm max-w-sm">
-                               <span>{cat.name}</span>
-                               <Button size="icon" variant="ghost" onClick={() => handleDeleteCategory(cat.id)} disabled={isCategoryLoading}>
-                                   <Trash2 className="h-4 w-4 text-destructive" />
-                               </Button>
-                           </div>
-                       ))}
-                       {categories.length === 0 && <p className="text-sm text-muted-foreground">Nenhuma categoria criada.</p>}
-                   </div>
-                </CardContent>
-            </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
+                            </TableHeader>
+                            <TableBody>
+                            {sortedAndFilteredProducts.map(p => (
+                                <TableRow key={p.id}>
+                                <TableCell className="font-medium text-xs md:text-sm">{p.name}</TableCell>
+                                <TableCell className={cn("text-xs md:text-sm font-semibold", getQuantityClass(p.quantity))}>
+                                    {p.quantity === 0 && <AlertTriangle className="inline-block h-4 w-4 mr-1" />}
+                                    {p.quantity}
+                                </TableCell>
+                                <TableCell className="hidden md:table-cell text-xs md:text-sm"><Badge variant="secondary">{p.categoryName}</Badge></TableCell>
+                                <TableCell className="text-right">
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <Button aria-haspopup="true" size="icon" variant="ghost" disabled={isLoading}>
+                                        <MoreHorizontal className="h-4 w-4" />
+                                        <span className="sr-only">Menu</span>
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end">
+                                        <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                                        <DropdownMenuItem onClick={() => openMovementDialog(p, 'in')}>
+                                        <ArrowUp className="mr-2 h-4 w-4 text-green-500" /> Entrada
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => openMovementDialog(p, 'out')}>
+                                        <ArrowDown className="mr-2 h-4 w-4 text-red-500" /> Saída
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => openProductDialog(p)}>
+                                        <Pencil className="mr-2 h-4 w-4" /> Editar
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem className="text-red-600 focus:text-red-600 focus:bg-red-50" onClick={() => handleDeleteProduct(p.id)}>
+                                        <Trash2 className="mr-2 h-4 w-4" /> Deletar
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </TableCell>
+                                </TableRow>
+                            ))}
+                            {sortedAndFilteredProducts.length === 0 && (
+                                <TableRow>
+                                    <TableCell colSpan={4} className="text-center h-24 text-sm">
+                                        {searchTerm ? 'Nenhum produto encontrado com este nome.' : 'Nenhum produto cadastrado.'}
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                            </TableBody>
+                        </Table>
+                    </div>
+                </TabsContent>
+                <TabsContent value="categories" className="pt-4">
+                    <CardDescription>Adicione ou remova categorias para organizar seu estoque.</CardDescription>
+                    <div className="space-y-4 mt-4">
+                    <div className="flex flex-col sm:flex-row gap-2 max-w-lg">
+                        <Input 
+                            placeholder="Nova categoria..." 
+                            value={newCategoryName}
+                            onChange={(e) => setNewCategoryName(e.target.value)}
+                        />
+                        <div className="flex gap-2">
+                            <Button onClick={handleAddCategory} disabled={isCategoryLoading} className="w-full sm:w-auto">
+                                {isCategoryLoading ? <Loader2 className="animate-spin" /> : <FolderPlus className="mr-2 h-4 w-4" />}
+                                Adicionar
+                            </Button>
+                            {categories.length > 0 && (
+                            <TooltipProvider>
+                                <Tooltip>
+                                <TooltipTrigger asChild>
+                                    {/* The TooltipTrigger needs a child, so we wrap the button */}
+                                    <div>
+                                    <Button 
+                                        variant="destructive" 
+                                        onClick={handleClearCategories} 
+                                        disabled={isCategoryLoading || products.length > 0}
+                                        className="w-full sm:w-auto"
+                                    >
+                                        <Trash2 className="mr-2 h-4 w-4"/>
+                                        Limpar Tudo
+                                    </Button>
+                                    </div>
+                                </TooltipTrigger>
+                                {products.length > 0 && (
+                                    <TooltipContent>
+                                    <p>Exclua todos os produtos antes de limpar as categorias.</p>
+                                    </TooltipContent>
+                                )}
+                                </Tooltip>
+                            </TooltipProvider>
+                            )}
+                        </div>
+                    </div>
+                    <div className="space-y-2">
+                        {categories.map(cat => (
+                            <div key={cat.id} className="flex items-center justify-between bg-muted p-2 rounded-md text-sm max-w-sm">
+                                <span>{cat.name}</span>
+                                <Button size="icon" variant="ghost" onClick={() => handleDeleteCategory(cat.id)} disabled={isCategoryLoading}>
+                                    <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                            </div>
+                        ))}
+                        {categories.length === 0 && <p className="text-sm text-muted-foreground">Nenhuma categoria criada.</p>}
+                    </div>
+                    </div>
+                </TabsContent>
+            </Tabs>
+        </CardContent>
+    </Card>
 
     {/* Product Dialog */}
     <Dialog open={isProductDialogOpen} onOpenChange={setIsProductDialogOpen}>

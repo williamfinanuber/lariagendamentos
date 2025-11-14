@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { format, parseISO, addDays, isPast } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Wrench, MessageSquare, Search, Loader2, Trash2, AlertTriangle, KeyRound, RefreshCw } from 'lucide-react';
+import { Wrench, MessageSquare, Search, Loader2, Trash2, AlertTriangle, KeyRound, RefreshCw, ArrowLeft } from 'lucide-react';
 import type { Booking } from '@/lib/types';
 import { markMaintenanceReminderAsSent, deleteAllData, restoreDefaultProcedures } from '@/lib/firebase';
 import { useToast } from '@/hooks/use-toast';
@@ -23,6 +23,7 @@ import {
   DialogTrigger,
   DialogClose,
 } from '@/components/ui/dialog';
+import Link from 'next/link';
 
 interface MaintenanceClientPageProps {
   completedBookings: Booking[];
@@ -149,8 +150,16 @@ export default function MaintenanceClientPage({ completedBookings }: Maintenance
     <div className="space-y-6">
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-xl md:text-2xl"><Wrench/> Clientes para Manutenção</CardTitle>
-        <CardDescription className="text-sm md:text-base">
+        <div className="flex items-center gap-4">
+            <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+                <Link href="/admin">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Voltar
+                </Link>
+            </Button>
+            <CardTitle className="text-xl md:text-2xl">Manutenção e Configurações</CardTitle>
+        </div>
+        <CardDescription className="pt-2 text-sm md:text-base">
           Encontre clientes que estão no período de fazer a manutenção com base na data do último atendimento concluído.
         </CardDescription>
         <div className="flex flex-col sm:flex-row gap-4 pt-4 items-end">

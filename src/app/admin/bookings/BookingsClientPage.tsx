@@ -15,7 +15,8 @@ import {
   Trash2,
   CheckCircle,
   Filter,
-  Cake
+  Cake,
+  ArrowLeft
 } from 'lucide-react';
 import type { Booking } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -47,6 +48,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 
 interface BookingsClientPageProps {
@@ -183,8 +185,16 @@ export default function BookingsClientPage({ initialBookings }: BookingsClientPa
     <>
     <Card>
       <CardHeader>
-        <CardTitle className="text-base md:text-xl">Gerenciar Agendamentos</CardTitle>
-        <CardDescription className="text-sm">Confirme ou descarte os agendamentos solicitados. Use os filtros para encontrar agendamentos específicos.</CardDescription>
+        <div className="flex items-center gap-4">
+            <Button asChild variant="outline" size="sm" className="flex-shrink-0">
+                <Link href="/admin">
+                    <ArrowLeft className="mr-2 h-4 w-4" />
+                    Voltar
+                </Link>
+            </Button>
+            <CardTitle className="text-xl md:text-2xl">Gerenciar Agendamentos</CardTitle>
+        </div>
+        <CardDescription className="pt-2 text-sm">Confirme ou descarte os agendamentos solicitados. Use os filtros para encontrar agendamentos específicos.</CardDescription>
         <div className="flex flex-col md:flex-row gap-4 pt-4">
             <div className="flex-1">
                 <Select value={procedureFilter} onValueChange={setProcedureFilter}>
