@@ -19,6 +19,7 @@ import {
   Printer,
   Pencil,
   AlertTriangle,
+  KeyRound,
 } from 'lucide-react';
 
 import { Card, CardHeader, CardTitle, CardContent, CardFooter, CardDescription } from '@/components/ui/card';
@@ -44,7 +45,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   Select,
@@ -167,15 +167,28 @@ export default function FinancePageClient({ initialTransactions, initialCategori
   const [isCategoryLoading, setIsCategoryLoading] = useState(false);
   const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState(false);
   const [isDateSelectorOpen, setIsDateSelectorOpen] = useState(false);
+  const [isConfirmClearOpen, setIsConfirmClearOpen] = useState(false);
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [correctPassword, setCorrectPassword] = useState('123456');
+
   const reportRef = useRef<HTMLDivElement>(null);
   const [reportData, setReportData] = useState<PrintableReportProps | null>(null);
 
   const { toast } = useToast();
   
+  useEffect(() => {
+    // This runs on the client, so localStorage is available.
+    const storedPassword = localStorage.getItem('adminPassword');
+    if (storedPassword) {
+      setCorrectPassword(storedPassword);
+    }
+  }, []);
+
   const { register, handleSubmit, control, watch, reset, setValue, formState: { errors } } = useForm<z.infer<typeof transactionSchema>>({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
@@ -316,11 +329,20 @@ export default function FinancePageClient({ initialTransactions, initialCategori
   };
 
   const handleClearHistory = async () => {
+    setPasswordError('');
+    if(password !== correctPassword) {
+        setPasswordError('Senha incorreta.');
+        toast({ title: 'Senha incorreta', variant: 'destructive' });
+        return;
+    }
+
     setIsLoading(true);
     try {
         await deleteAllTransactions();
         toast({ title: 'Histórico de transações foi limpo!', variant: 'destructive' });
         await fetchAllData();
+        setIsConfirmClearOpen(false);
+        setPassword('');
     } catch (error) {
         console.error(error);
         toast({ title: 'Erro ao limpar histórico', variant: 'destructive' });
@@ -524,34 +546,44 @@ export default function FinancePageClient({ initialTransactions, initialCategori
             <Card>
                 <CardHeader className="flex flex-col gap-y-2 md:flex-row md:items-center md:justify-between">
                     <CardTitle className="text-lg md:text-xl">Histórico de Transações</CardTitle>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="destructive" size="sm" disabled={isLoading || transactions.length === 0}>
+                    <Dialog open={isConfirmClearOpen} onOpenChange={setIsConfirmClearOpen}>
+                      <DialogTrigger asChild>
+                         <Button variant="destructive" size="sm" disabled={isLoading || transactions.length === 0}>
                             <Trash2 className="mr-2 h-4 w-4" />
                             Limpar Histórico
                         </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle className="flex items-center gap-2"><AlertTriangle/>Tem certeza absoluta?</AlertDialogTitle>
-                          <AlertDialogDescription>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle className="flex items-center gap-2"><AlertTriangle/>Tem certeza absoluta?</DialogTitle>
+                          <DialogDescription>
                             Esta ação é irreversível e irá apagar **todas** as suas transações financeiras permanentemente. 
-                            Seu faturamento será zerado. Deseja continuar?
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Não, cancelar</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={handleClearHistory}
-                            disabled={isLoading}
-                            className="bg-destructive hover:bg-destructive/90"
-                          >
-                            {isLoading ? <Loader2 className="animate-spin mr-2"/> : null}
-                            Sim, apagar tudo
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                            Para confirmar, insira sua senha de administrador.
+                          </DialogDescription>
+                        </DialogHeader>
+                         <div className="space-y-2 pt-2">
+                            <Label htmlFor="password-confirm" className="flex items-center gap-2">
+                                <KeyRound className="h-4 w-4" />
+                                Senha do Administrador
+                            </Label>
+                            <Input
+                                id="password-confirm"
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Digite a senha"
+                            />
+                            {passwordError && <p className="text-sm font-medium text-destructive">{passwordError}</p>}
+                        </div>
+                        <DialogFooter>
+                            <Button variant="secondary" onClick={() => { setIsConfirmClearOpen(false); setPassword(''); setPasswordError(''); }} disabled={isLoading}>Cancelar</Button>
+                            <Button variant="destructive" onClick={handleClearHistory} disabled={isLoading}>
+                                {isLoading ? <Loader2 className="animate-spin mr-2"/> : null}
+                                Sim, apagar tudo
+                            </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                 </CardHeader>
                 <CardContent>
                     <Table>
@@ -705,5 +737,7 @@ export default function FinancePageClient({ initialTransactions, initialCategori
     </>
   );
 }
+
+    
 
     
