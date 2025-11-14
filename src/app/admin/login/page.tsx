@@ -1,13 +1,15 @@
+
 "use client";
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Lock } from 'lucide-react';
+import { Lock, ArrowLeft } from 'lucide-react';
 
 export default function LoginPage() {
   const [password, setPassword] = useState('');
@@ -27,7 +29,6 @@ export default function LoginPage() {
       try {
         sessionStorage.setItem('isAdminAuthenticated', 'true');
         toast({ title: 'Acesso liberado!', description: 'Bem-vindo(a) ao painel.' });
-        // Navigate to the admin page and then refresh to force the layout to re-evaluate auth state.
         router.push('/admin'); 
         router.refresh(); 
       } catch (error) {
@@ -39,7 +40,6 @@ export default function LoginPage() {
       toast({ title: 'Acesso negado', description: 'A senha inserida está incorreta.', variant: 'destructive' });
       setIsLoading(false);
     }
-    // Don't set isLoading to false on success, as the page will refresh.
   };
 
   return (
@@ -68,9 +68,15 @@ export default function LoginPage() {
                 </div>
                 {error && <p className="text-sm text-center font-medium text-destructive">{error}</p>}
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex-col gap-2">
                 <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? 'Verificando...' : 'Entrar'}
+                </Button>
+                <Button asChild variant="outline" className="w-full">
+                    <Link href="/">
+                        <ArrowLeft className="mr-2" />
+                        Voltar à tela inicial
+                    </Link>
                 </Button>
             </CardFooter>
         </form>
