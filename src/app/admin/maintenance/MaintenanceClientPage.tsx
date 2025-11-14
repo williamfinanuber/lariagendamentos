@@ -191,7 +191,7 @@ export default function MaintenanceClientPage({ completedBookings }: Maintenance
                   <TableCell className="text-right">
                       <Button size="sm" className="bg-green-500 hover:bg-green-600 text-xs md:text-sm" onClick={() => handleSendReminder(booking)}>
                           <MessageSquare className="mr-2" />
-                          Enviar Lembrete
+                          Enviar
                       </Button>
                   </TableCell>
                 </TableRow>

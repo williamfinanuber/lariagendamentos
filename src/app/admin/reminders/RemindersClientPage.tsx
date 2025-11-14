@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -110,7 +111,7 @@ export default function RemindersClientPage({ bookings: initialBookings }: Remin
                         disabled={isSent || loading}
                       >
                         {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin"/> : (isSent ? <Check className="mr-2" /> : <MessageSquare className="mr-2" />)}
-                        {isSent ? 'Lembrete Enviado' : 'Enviar Lembrete'}
+                        {isSent ? 'Enviado' : 'Enviar'}
                       </Button>
                     </TableCell>
                   </TableRow>
