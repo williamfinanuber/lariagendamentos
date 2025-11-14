@@ -22,30 +22,40 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const [isLoading, setIsLoading] = useState(true);
 
      useEffect(() => {
+        let authStatus = false;
         try {
-            const authStatus = sessionStorage.getItem('isAdminAuthenticated') === 'true';
-            setIsAuthenticated(authStatus);
+            authStatus = sessionStorage.getItem('isAdminAuthenticated') === 'true';
         } catch (e) {
             // sessionStorage is not available on the server
         }
+        setIsAuthenticated(authStatus);
         setIsLoading(false);
     }, []);
-    
-    const handleAuthSuccess = () => {
-        setIsAuthenticated(true);
-        toast({ title: 'Acesso liberado!', description: 'Bem-vindo(a) ao painel.' });
-        router.push('/admin');
-    }
 
+    useEffect(() => {
+        if (isLoading) return; // Don't do anything while loading
+
+        if (!isAuthenticated && pathname !== '/admin/login') {
+            router.push('/admin/login');
+        }
+
+        if (isAuthenticated && pathname === '/admin/login') {
+            router.push('/admin');
+        }
+    }, [isLoading, isAuthenticated, pathname, router]);
+    
     const handleLogout = () => {
         sessionStorage.removeItem('isAdminAuthenticated');
         setIsAuthenticated(false);
+        toast({ title: "Você saiu!", description: "Você foi desconectado do painel."});
         router.push('/admin/login');
     };
 
     const menuItems = [
         { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
         { href: '/admin/agenda', label: 'Agenda', icon: Calendar },
+        { href: '/admin/dynamic-agenda', label: 'Agenda Dinâmica', icon: CalendarClock },
+        { href: '/admin/bookings', label: 'Gerenciar Agendamentos', icon: CalendarCheck },
         { href: '/admin/clients', label: 'Clientes', icon: Users },
         { href: '/admin/reminders', label: 'Lembretes', icon: Bell },
         { href: '/admin/procedures', label: 'Procedimentos', icon: Eye },
@@ -59,15 +69,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         return <div className="flex h-screen w-full items-center justify-center">Carregando...</div>;
     }
     
-    // If user is not authenticated, and not on the login page, redirect to login
     if (!isAuthenticated && pathname !== '/admin/login') {
-         router.push('/admin/login');
          return <div className="flex h-screen w-full items-center justify-center">Redirecionando para o login...</div>;
     }
 
-    // If user is authenticated but somehow on the login page, redirect to dashboard
     if(isAuthenticated && pathname === '/admin/login'){
-        router.push('/admin');
         return <div className="flex h-screen w-full items-center justify-center">Redirecionando para o painel...</div>;
     }
     
