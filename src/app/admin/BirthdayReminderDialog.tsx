@@ -36,8 +36,14 @@ export default function BirthdayReminderDialog({ clients }: BirthdayReminderDial
   useEffect(() => {
     if (clients.length > 0) {
       const todayKey = getTodayStorageKey();
-      const sentContacts = JSON.parse(localStorage.getItem(todayKey) || '{}');
-      const filteredUnsent = clients.filter(client => !sentContacts[client.contact]);
+      const sentStatus = JSON.parse(localStorage.getItem(todayKey) || '{}');
+      
+      // If the dialog was explicitly closed today, don't show it again.
+      if (sentStatus.dialog_closed) {
+          return;
+      }
+      
+      const filteredUnsent = clients.filter(client => !sentStatus[client.contact]);
       
       setUnsentClients(filteredUnsent);
 
@@ -68,11 +74,10 @@ export default function BirthdayReminderDialog({ clients }: BirthdayReminderDial
 
   const handleClose = () => {
      const todayKey = getTodayStorageKey();
-     // Create a temporary marker to not show the dialog again today
-     // even if no message was sent.
-     if(!localStorage.getItem(todayKey)) {
-        localStorage.setItem(todayKey, JSON.stringify({ dialog_closed: true }));
-     }
+     // Always mark the dialog as closed for today to prevent it from reappearing.
+     const sentStatus = JSON.parse(localStorage.getItem(todayKey) || '{}');
+     sentStatus.dialog_closed = true;
+     localStorage.setItem(todayKey, JSON.stringify(sentStatus));
      setIsOpen(false);
   }
 
