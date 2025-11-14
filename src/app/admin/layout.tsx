@@ -21,28 +21,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-     useEffect(() => {
+    useEffect(() => {
         let authStatus = false;
         try {
+            // This check will only run on the client side
             authStatus = sessionStorage.getItem('isAdminAuthenticated') === 'true';
         } catch (e) {
-            // sessionStorage is not available on the server
+            console.error("Could not access sessionStorage.");
         }
+        
         setIsAuthenticated(authStatus);
         setIsLoading(false);
-    }, []);
 
-    useEffect(() => {
-        if (isLoading) return; // Don't do anything while loading
-
-        if (!isAuthenticated && pathname !== '/admin/login') {
+        if (!authStatus && pathname !== '/admin/login') {
             router.push('/admin/login');
         }
 
-        if (isAuthenticated && pathname === '/admin/login') {
+        if (authStatus && pathname === '/admin/login') {
             router.push('/admin');
         }
-    }, [isLoading, isAuthenticated, pathname, router]);
+    }, [pathname, router]);
     
     const handleLogout = () => {
         sessionStorage.removeItem('isAdminAuthenticated');
@@ -69,17 +67,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         return <div className="flex h-screen w-full items-center justify-center">Carregando...</div>;
     }
     
-    if (!isAuthenticated && pathname !== '/admin/login') {
-         return <div className="flex h-screen w-full items-center justify-center">Redirecionando para o login...</div>;
-    }
-
-    if(isAuthenticated && pathname === '/admin/login'){
-        return <div className="flex h-screen w-full items-center justify-center">Redirecionando para o painel...</div>;
-    }
-    
-    // Let the login page render itself if it's the current path and user is not authenticated
+    // If we're on the login page, render it directly without the layout shell.
     if (pathname === '/admin/login') {
         return children;
+    }
+    
+    // If not authenticated and not on the login page, show a loading/redirecting message.
+    if (!isAuthenticated) {
+        return <div className="flex h-screen w-full items-center justify-center">Redirecionando para o login...</div>;
     }
     
     return (

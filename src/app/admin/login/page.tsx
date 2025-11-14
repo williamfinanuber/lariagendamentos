@@ -27,9 +27,9 @@ export default function LoginPage() {
       try {
         sessionStorage.setItem('isAdminAuthenticated', 'true');
         toast({ title: 'Acesso liberado!', description: 'Bem-vindo(a) ao painel.' });
-        // Instead of a prop, we force a reload or router push to make the layout re-evaluate
+        // Navigate to the admin page and then refresh to force the layout to re-evaluate auth state.
         router.push('/admin'); 
-        router.refresh(); // Forces a refresh of the server components and layout
+        router.refresh(); 
       } catch (error) {
          setError('Seu navegador não suporta o armazenamento de sessão. Tente usar um navegador diferente.');
          toast({ title: 'Erro de Navegador', description: 'Não foi possível salvar a sessão.', variant: 'destructive'});
@@ -37,8 +37,9 @@ export default function LoginPage() {
     } else {
       setError('Senha incorreta. Tente novamente.');
       toast({ title: 'Acesso negado', description: 'A senha inserida está incorreta.', variant: 'destructive' });
+      setIsLoading(false);
     }
-    setIsLoading(false);
+    // Don't set isLoading to false on success, as the page will refresh.
   };
 
   return (
